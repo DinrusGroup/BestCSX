@@ -1,0 +1,393 @@
+[01:45:46] *********Axiom 3D Engine Log *************
+Copyright Copyright ? 2003-2012 Axiom Rendering Engine Project Team.
+Version: 0.8.3376.12322
+Operating System: Microsoft Windows NT 6.2.9200.0
+.Net Framework: 2.0.50727.8009
+
+[01:45:46] *-*-* Axiom Initializing
+[01:45:46] ArchiveFactory for archive type ZipFile registered.
+[01:45:46] ArchiveFactory for archive type Folder registered.
+[01:45:48] Registering ResourceManager for type HighLevelGpuProgram
+[01:45:48] Creating resource group General
+[01:45:48] Creating resource group Internal
+[01:45:48] Creating resource group Bootstrap
+[01:45:48] Creating resource group AutoDetect
+[01:45:48] SceneManagerFactory for type 'DefaultSceneManager' registered
+[01:45:49] Registering ScriptLoader for patterns *.program *.material 
+[01:45:49] Registering ResourceManager for type Material
+[01:45:49] Registering ResourceManager for type Mesh
+[01:45:49] Registering ResourceManager for type Skeleton
+[01:45:49] Registering ScriptLoader for patterns *.particle 
+[01:45:55] Win32 Platform Manager Loaded.
+[01:45:55] Registering ScriptLoader for patterns *.fontdef 
+[01:45:55] Registering ResourceManager for type Font
+[01:45:55] Registering ScriptLoader for patterns *.overlay 
+[01:45:55] OverlayElementFactory for type 'BorderPanel' registered.
+[01:45:55] OverlayElementFactory for type 'TextArea' registered.
+[01:45:55] OverlayElementFactory for type 'Panel' registered.
+[01:45:55] Registering ScriptLoader for patterns *.compositor 
+[01:45:55] Registering ResourceManager for type Compositor
+[01:45:55] Registering ScriptLoader for patterns *.os 
+[01:45:59] Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+   в System.Reflection.Module._GetTypesInternal(StackCrawlMark& stackMark)
+   в System.Reflection.Assembly.GetTypes()
+   в Axiom.Core.DynamicLoader.Find(Type baseType)
+[01:45:59] Loader Exceptions:
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:45:59] Невозможно загрузить файл или сборку "SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:46:01] Не удается загрузить один или более запрошенных типов. Обратитесь к свойству LoaderExceptions для получения дополнительных сведений.
+   в System.Reflection.Module._GetTypesInternal(StackCrawlMark& stackMark)
+   в System.Reflection.Assembly.GetTypes()
+   в Axiom.Core.DynamicLoader.Find(Type baseType)
+[01:46:01] Loader Exceptions:
+[01:46:01] Невозможно загрузить файл или сборку "Microsoft.Xna.Framework.Content.Pipeline, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:46:01] Невозможно загрузить файл или сборку "Microsoft.Xna.Framework.Content.Pipeline, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:46:01] Невозможно загрузить файл или сборку "Microsoft.Xna.Framework.Content.Pipeline, Version=3.1.0.0, Culture=neutral, PublicKeyToken=6d5c3888ef60e27d" или один из зависимых от них компонентов. Не удается найти указанный файл.
+
+[01:46:02] Невозможно загрузить файл или сборку "file:///e:\BestCSX\lib\Axiom\cg.dll" или один из зависимых от них компонентов. Ожидалось, что модуль содержит манифест сборки.
+[01:46:02] Невозможно загрузить файл или сборку "file:///e:\BestCSX\lib\Axiom\FreeImage.dll" или один из зависимых от них компонентов. Ожидалось, что модуль содержит манифест сборки.
+[01:46:03] Невозможно загрузить файл или сборку "file:///e:\BestCSX\lib\Axiom\freetype6.dll" или один из зависимых от них компонентов. Ожидалось, что модуль содержит манифест сборки.
+[01:46:15] Невозможно загрузить файл или сборку "file:///e:\BestCSX\lib\Axiom\zlib1.dll" или один из зависимых от них компонентов. Ожидалось, что модуль содержит манифест сборки.
+[01:46:17] Loaded plugin: Axiom nVidia Cg Plugin
+[01:46:18] Loaded plugin: Axiom DevIL Codecs Plugin
+[01:46:18] FreeImage Version: 3.14.1
+[01:46:18] This program uses FreeImage, a free, open source image library supporting all common bitmap formats. See http://freeimage.sourceforge.net for details
+[01:46:18]  Supported formats: bmp,ico,jpg,jif,jpeg,jpe,jng,koa,iff,lbm,mng,pbm,pbm,pcd,pcx,pgm,pgm,png,ppm,ppm,ras,tga,targa,tif,tiff,wap,wbmp,wbm,psd,cut,xbm,xpm,gif,hdr,g3,sgi,exr,j2k,j2c,jp2,pfm,pct,pict,pic,bay,bmq,cr2,crw,cs1,dc2,dcr,dng,erf,fff,hdr,k25,kdc,mdc,mos,mrw,nef,orf,pef,pxn,raf,raw,rdc,sr2,srf,arw,3fr,cine,ia,kc2,mef,nrw,qtk,rw2,sti,drf,dsc,ptx,cap,iiq,rwz
+[01:46:18] Loaded plugin: Axiom FreeImage Codecs Plugin
+[01:46:18] PCZone Factory Type 'ZoneType_Default' registered
+[01:46:18] PCZone Factory Type 'ZoneType_Terrain' registered
+[01:46:18] PCZone Factory Type 'ZoneType_Octree' registered
+[01:46:18] Loaded plugin: OctreeZone
+[01:46:18] Particle Emitter type 'Box' registered.
+[01:46:18] Particle Emitter type 'Point' registered.
+[01:46:18] Particle Emitter type 'Cylinder' registered.
+[01:46:18] Particle Emitter type 'Ellipsoid' registered.
+[01:46:18] Particle Emitter type 'HollowEllipsoid' registered.
+[01:46:18] Particle Emitter type 'Ring' registered.
+[01:46:18] Particle Affector type 'LinearForce' registered.
+[01:46:18] Particle Affector type 'ColourFader' registered.
+[01:46:18] Particle Affector type 'ColourFader2' registered.
+[01:46:18] Particle Affector type 'ColourImage' registered.
+[01:46:18] Particle Affector type 'ColourInterpolator' registered.
+[01:46:18] Particle Affector type 'Scaler' registered.
+[01:46:18] Particle Affector type 'Rotator' registered.
+[01:46:18] Particle Affector type 'DeflectorPlane' registered.
+[01:46:18] Particle Affector type 'DirectionRandomizer' registered.
+[01:46:18] Loaded plugin: Axiom ParticleFX Plugin
+[01:46:18] Loaded plugin: Axiom System.Drawing Codecs Plugin
+[01:46:18] Axiom OpenGL (OpenTK) Rendering Subsystem created.
+[01:46:19] OpenGL : RenderSystem Option: Display Frequency = N/A
+[01:46:19] OpenGL : RenderSystem Option: Color Depth = 32
+[01:46:19] Loaded plugin: Axiom OpenGL (OpenTK) Rendering Subsystem
+[01:46:22] Loaded plugin: Axiom Xna Rendering Subsystem
+[01:46:22] Loaded plugin: Axiom.Samples.Common
+[01:46:22] SceneManagerFactory for type 'BspSceneManager' registered
+[01:46:22] Loaded plugin: Axiom BSP Scene Manager Plugin
+[01:46:22] SceneManagerFactory for type 'OctreeSceneManager' registered
+[01:46:22] SceneManagerFactory for type 'TerrainSceneManager' registered
+[01:46:22] Loaded plugin: Axiom Octree SceneManager Plugin
+[01:46:22] SceneManagerFactory for type 'PCZSceneManager' registered
+[01:46:22] Factory PCZLightFactory registered for MovableObjectType 'PCZLight'.
+[01:46:22] Factory PortalFactory registered for MovableObjectType 'Portal'.
+[01:46:22] Factory AntiPortalFactory registered for MovableObjectType 'AntiPortal'.
+[01:46:22] Loaded plugin: Axiom.SceneManagers.PortalConnected
+[01:46:22] Factory EntityFactory registered for MovableObjectType 'Entity'.
+[01:46:22] Factory LightFactory registered for MovableObjectType 'Light'.
+[01:46:22] Factory BillboardSetFactory registered for MovableObjectType 'BillboardSet'.
+[01:46:22] Factory ManualObjectFactory registered for MovableObjectType 'ManualObject'.
+[01:46:22] Factory BillboardChainFactory registered for MovableObjectType 'BillboardChain'.
+[01:46:22] Factory RibbonTrailFactory registered for MovableObjectType 'RibbonTrail'.
+[01:46:22] Factory MovableTextFactory registered for MovableObjectType 'MovableText'.
+[01:46:31] CPU Identifier & Features
+[01:46:31] -------------------------
+[01:46:31] CPU Identification not available
+[01:46:31]  *     SSE1: False
+[01:46:31]  *     SSE2: False
+[01:46:31]  *     SSE3: False
+[01:46:31]  *    SSSE3: False
+[01:46:31]  *    SSSE3: False
+[01:46:31]  *    SSSE3: False
+[01:46:31]  *    SSSE3: False
+[01:46:31] -------------------------
+[01:46:31] *** Starting OpenTKGL Subsystem ***
+[01:46:31] GLRenderSystem.CreateRenderWindow "Axiom Sample Browser", 800x600 windowed miscParams:  colorDepth = 32  vsync = No  fsaa = 0  title = Axiom Sample Browser 
+[01:46:40] ***************************
+[01:46:40] *** GL Renderer Started ***
+[01:46:40] ***************************
+[01:46:40] Vendor: NVIDIA
+[01:46:40] Video Board: GeForce 7300 GS/PCIe/SSE2
+[01:46:40] Version: 2.1.2
+[01:46:40] Extensions supported: 
+[01:46:40] GL_ARB_color_buffer_float
+[01:46:40] GL_ARB_compressed_texture_pixel_storage
+[01:46:40] GL_ARB_conservative_depth
+[01:46:40] GL_ARB_copy_buffer
+[01:46:40] GL_ARB_depth_clamp
+[01:46:40] GL_ARB_depth_texture
+[01:46:40] GL_ARB_draw_buffers
+[01:46:40] GL_ARB_ES2_compatibility
+[01:46:40] GL_ARB_explicit_attrib_location
+[01:46:40] GL_ARB_fragment_program
+[01:46:40] GL_ARB_fragment_program_shadow
+[01:46:40] GL_ARB_fragment_shader
+[01:46:40] GL_ARB_framebuffer_object
+[01:46:40] GL_ARB_get_program_binary
+[01:46:40] GL_ARB_half_float_pixel
+[01:46:40] GL_ARB_half_float_vertex
+[01:46:40] GL_ARB_imaging
+[01:46:40] GL_ARB_internalformat_query
+[01:46:40] GL_ARB_map_buffer_alignment
+[01:46:40] GL_ARB_map_buffer_range
+[01:46:40] GL_ARB_multisample
+[01:46:40] GL_ARB_multitexture
+[01:46:40] GL_ARB_occlusion_query
+[01:46:40] GL_ARB_occlusion_query2
+[01:46:40] GL_ARB_pixel_buffer_object
+[01:46:40] GL_ARB_point_parameters
+[01:46:40] GL_ARB_point_sprite
+[01:46:40] GL_ARB_provoking_vertex
+[01:46:40] GL_ARB_robustness
+[01:46:40] GL_ARB_sampler_objects
+[01:46:40] GL_ARB_separate_shader_objects
+[01:46:40] GL_ARB_shader_objects
+[01:46:40] GL_ARB_shading_language_100
+[01:46:40] GL_ARB_shading_language_420pack
+[01:46:40] GL_ARB_shading_language_include
+[01:46:40] GL_ARB_shadow
+[01:46:40] GL_ARB_sync
+[01:46:40] GL_ARB_texture_border_clamp
+[01:46:40] GL_ARB_texture_compression
+[01:46:40] GL_ARB_texture_cube_map
+[01:46:40] GL_ARB_texture_env_add
+[01:46:40] GL_ARB_texture_env_combine
+[01:46:40] GL_ARB_texture_env_crossbar
+[01:46:40] GL_ARB_texture_env_dot3
+[01:46:40] GL_ARB_texture_float
+[01:46:40] GL_ARB_texture_mirrored_repeat
+[01:46:40] GL_ARB_texture_non_power_of_two
+[01:46:40] GL_ARB_texture_rectangle
+[01:46:40] GL_ARB_texture_rg
+[01:46:40] GL_ARB_texture_storage
+[01:46:40] GL_ARB_texture_swizzle
+[01:46:40] GL_ARB_timer_query
+[01:46:40] GL_ARB_transpose_matrix
+[01:46:40] GL_ARB_vertex_array_bgra
+[01:46:40] GL_ARB_vertex_array_object
+[01:46:40] GL_ARB_vertex_buffer_object
+[01:46:40] GL_ARB_vertex_program
+[01:46:40] GL_ARB_vertex_shader
+[01:46:40] GL_ARB_window_pos
+[01:46:40] GL_ATI_draw_buffers
+[01:46:40] GL_ATI_texture_float
+[01:46:40] GL_ATI_texture_mirror_once
+[01:46:40] GL_S3_s3tc
+[01:46:40] GL_EXT_texture_env_add
+[01:46:40] GL_EXT_abgr
+[01:46:40] GL_EXT_bgra
+[01:46:40] GL_EXT_blend_color
+[01:46:40] GL_EXT_blend_equation_separate
+[01:46:40] GL_EXT_blend_func_separate
+[01:46:40] GL_EXT_blend_minmax
+[01:46:40] GL_EXT_blend_subtract
+[01:46:40] GL_EXT_compiled_vertex_array
+[01:46:40] GL_EXT_Cg_shader
+[01:46:40] GL_EXT_depth_bounds_test
+[01:46:40] GL_EXT_direct_state_access
+[01:46:40] GL_EXT_draw_range_elements
+[01:46:40] GL_EXT_fog_coord
+[01:46:40] GL_EXT_framebuffer_blit
+[01:46:40] GL_EXT_framebuffer_multisample
+[01:46:40] GL_EXT_framebuffer_object
+[01:46:40] GL_EXT_gpu_program_parameters
+[01:46:40] GL_EXT_multi_draw_arrays
+[01:46:40] GL_EXT_packed_depth_stencil
+[01:46:40] GL_EXT_packed_pixels
+[01:46:40] GL_EXT_pixel_buffer_object
+[01:46:40] GL_EXT_point_parameters
+[01:46:40] GL_EXT_provoking_vertex
+[01:46:40] GL_EXT_rescale_normal
+[01:46:40] GL_EXT_secondary_color
+[01:46:40] GL_EXT_separate_shader_objects
+[01:46:40] GL_EXT_separate_specular_color
+[01:46:40] GL_EXT_shadow_funcs
+[01:46:40] GL_EXT_stencil_two_side
+[01:46:40] GL_EXT_stencil_wrap
+[01:46:40] GL_EXT_texture3D
+[01:46:40] GL_EXT_texture_compression_dxt1
+[01:46:40] GL_EXT_texture_compression_s3tc
+[01:46:40] GL_EXT_texture_cube_map
+[01:46:40] GL_EXT_texture_edge_clamp
+[01:46:40] GL_EXT_texture_env_combine
+[01:46:40] GL_EXT_texture_env_dot3
+[01:46:40] GL_EXT_texture_filter_anisotropic
+[01:46:40] GL_EXT_texture_format_BGRA8888
+[01:46:40] GL_EXT_texture_lod
+[01:46:40] GL_EXT_texture_lod_bias
+[01:46:40] GL_EXT_texture_mirror_clamp
+[01:46:40] GL_EXT_texture_object
+[01:46:40] GL_EXT_texture_sRGB
+[01:46:40] GL_EXT_texture_sRGB_decode
+[01:46:40] GL_EXT_texture_storage
+[01:46:40] GL_EXT_texture_swizzle
+[01:46:40] GL_EXT_timer_query
+[01:46:40] GL_EXT_vertex_array
+[01:46:40] GL_EXT_vertex_array_bgra
+[01:46:40] GL_EXT_import_sync_object
+[01:46:40] GL_IBM_rasterpos_clip
+[01:46:40] GL_IBM_texture_mirrored_repeat
+[01:46:40] GL_KTX_buffer_region
+[01:46:40] GL_NV_alpha_test
+[01:46:40] GL_NV_blend_minmax
+[01:46:40] GL_NV_blend_square
+[01:46:40] GL_NV_complex_primitives
+[01:46:40] GL_NV_copy_depth_to_color
+[01:46:40] GL_NV_depth_clamp
+[01:46:40] GL_NV_ES1_1_compatibility
+[01:46:40] GL_NV_fbo_color_attachments
+[01:46:40] GL_NV_fence
+[01:46:40] GL_NV_float_buffer
+[01:46:40] GL_NV_fog_distance
+[01:46:40] GL_NV_fragdepth
+[01:46:40] GL_NV_fragment_program
+[01:46:40] GL_NV_fragment_program_option
+[01:46:40] GL_NV_fragment_program2
+[01:46:40] GL_NV_framebuffer_multisample_coverage
+[01:46:40] GL_NV_half_float
+[01:46:40] GL_NV_light_max_exponent
+[01:46:40] GL_NV_multisample_filter_hint
+[01:46:40] GL_NV_occlusion_query
+[01:46:40] GL_NV_packed_depth_stencil
+[01:46:40] GL_NV_pixel_data_range
+[01:46:40] GL_NV_point_sprite
+[01:46:40] GL_NV_primitive_restart
+[01:46:40] GL_NV_register_combiners
+[01:46:40] GL_NV_register_combiners2
+[01:46:40] GL_NV_texgen_reflection
+[01:46:40] GL_NV_texture_barrier
+[01:46:40] GL_NV_texture_compression_vtc
+[01:46:40] GL_NV_texture_env_combine4
+[01:46:40] GL_NV_texture_expand_normal
+[01:46:40] GL_NV_texture_lod_clamp
+[01:46:40] GL_NV_texture_rectangle
+[01:46:40] GL_NV_texture_shader
+[01:46:40] GL_NV_texture_shader2
+[01:46:40] GL_NV_texture_shader3
+[01:46:40] GL_NV_vertex_array_range
+[01:46:40] GL_NV_vertex_array_range2
+[01:46:40] GL_NV_vertex_program
+[01:46:40] GL_NV_vertex_program1_1
+[01:46:40] GL_NV_vertex_program2
+[01:46:40] GL_NV_vertex_program2_option
+[01:46:40] GL_NV_vertex_program3
+[01:46:40] GL_NVX_conditional_render
+[01:46:40] GL_OES_compressed_paletted_texture
+[01:46:40] GL_OES_depth24
+[01:46:40] GL_OES_depth32
+[01:46:40] GL_OES_depth_texture
+[01:46:40] GL_OES_element_index_uint
+[01:46:40] GL_OES_fbo_render_mipmap
+[01:46:40] GL_OES_get_program_binary
+[01:46:40] GL_OES_mapbuffer
+[01:46:40] GL_OES_packed_depth_stencil
+[01:46:40] GL_OES_point_size_array
+[01:46:40] GL_OES_point_sprite
+[01:46:40] GL_OES_rgb8_rgba8
+[01:46:40] GL_OES_read_format
+[01:46:40] GL_OES_standard_derivatives
+[01:46:40] GL_OES_texture_3D
+[01:46:40] GL_OES_texture_float
+[01:46:40] GL_OES_texture_float_linear
+[01:46:40] GL_OES_texture_half_float
+[01:46:40] GL_OES_texture_half_float_linear
+[01:46:40] GL_OES_texture_npot
+[01:46:40] GL_OES_vertex_array_object
+[01:46:40] GL_OES_vertex_half_float
+[01:46:40] GL_SGIS_generate_mipmap
+[01:46:40] GL_SGIS_texture_lod
+[01:46:40] GL_SGIX_depth_texture
+[01:46:40] GL_SGIX_shadow
+[01:46:40] GL_SUN_slice_accum
+[01:46:40] GL_WIN_swap_hint
+[01:46:40] WGL_EXT_swap_control
+[01:46:40] 
+[01:46:40] GLSL support detected
+[01:46:40] GL: Using GL_EXT_framebuffer_object for rendering to textures (best)
+[01:46:40] 	FBO PF_UNKNOWN depth/stencil support: D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:41] 	FBO PF_R5G6B5 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:43] 	FBO PF_B5G6R5 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:45] 	FBO PF_R8G8B8 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:45] 	FBO PF_B8G8R8 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:46] 	FBO PF_A8R8G8B8 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:48] 	FBO PF_B8G8R8A8 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:49] 	FBO PF_A2R10G10B10 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:49] 	FBO PF_A2B10G10R10 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:49] 	FBO PF_X8R8G8B8 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:50] 	FBO PF_X8B8G8R8 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:50] 	FBO PF_SHORT_RGBA depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:50] 	FBO PF_R3G3B2 depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:51] 	FBO PF_SHORT_RGB depth/stencil support: D0S0 D16S0 D24S0 D32S0 Packed-D24S8 
+[01:46:51] [GL] : Valid FBO targets PF_UNKNOWN PF_R5G6B5 PF_B5G6R5 PF_R8G8B8 PF_B8G8R8 PF_A8R8G8B8 PF_B8G8R8A8 PF_A2R10G10B10 PF_A2B10G10R10 PF_X8R8G8B8 PF_X8B8G8R8 PF_SHORT_RGBA PF_R3G3B2 PF_SHORT_RGB 
+[01:46:51] ---RenderSystem capabilities---
+[01:46:51] 	-GPU Vendor: Unknown
+[01:46:51] 	-Device Name: 
+[01:46:51] 	-Driver Version: 0.0.0.0
+[01:46:51] 	-Available texture units: 16
+[01:46:51] 	-Maximum lights available: 8
+[01:46:51] 	-Hardware generation of mip-maps: yes
+[01:46:51] 	-Texture blending: yes
+[01:46:51] 	-Anisotropic texture filtering: yes
+[01:46:51] 	-Dot product texture operation: yes
+[01:46:51] 	-Cube Mapping: yes
+[01:46:51] 	-Hardware stencil buffer: yes
+[01:46:51] 		-Stencil depth: 8 bits
+[01:46:51] 		-Two sided stencil support: yes
+[01:46:51] 		-Wrap stencil values: yes
+[01:46:51] 	-Hardware vertex/index buffers: yes
+[01:46:51] 	-Vertex programs: yes
+[01:46:51] 		-Max vertex program version: vp40
+[01:46:51] 	-Fragment programs: yes
+[01:46:51] 		-Max fragment program version: fp40
+[01:46:51] 	-Texture compression: yes
+[01:46:51] 		-DXT: yes
+[01:46:51] 		-VTC: yes
+[01:46:51] 	-Scissor rectangle: yes
+[01:46:51] 	-Hardware Occlusion Query: yes
+[01:46:51] 	-User clip planes: yes
+[01:46:51] 	-VertexElementType.UBYTE4: yes
+[01:46:51] 	-Infinite far plane projection: yes
+[01:46:51] 	-Max Point Size: 63.375 
+[01:46:51] 	-Vertex texture fetch: yes 
+[01:46:51] 		-Max vertex textures: 4
+[01:46:51] 		-Vertex textures shared: yes
+[01:46:51] Registering ResourceManager for type Texture
+[01:46:51] Particle Renderer type 'billboard' registered.
+[01:46:52] Initializing resource group Essential.
+[01:47:17] Failed to delete IndexBuffer[6].
+[01:47:17] Error Deleting Vertexbuffer[5].
+[01:47:17] Failed to delete IndexBuffer[4].
+[01:47:17] Error Deleting Vertexbuffer[3].
+[01:47:17] Failed to delete IndexBuffer[2].
+[01:47:17] Error Deleting Vertexbuffer[1].
+[01:47:17] Error Deleting Texture[1].

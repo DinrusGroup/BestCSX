@@ -1,0 +1,3363 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HSS.Data.Storage.NET45</name>
+    </assembly>
+    <members>
+        <member name="T:HSS.Data.Storage.CharLengthAttribute">
+            <summary>
+            CharLengthAttribute is a constraint that defines the maximum size (number of characters) allowed for a given
+            property of type <see cref="T:System.String"/> and roughly correlates to a SQL VARCHAR(SIZE).
+            </summary>
+            <remarks>
+            <para>
+            This attribute is required on all properties of type <see cref="T:System.String"/>, unless you do not store the property (see <see cref="T:HSS.Data.Storage.DoNotStoreAttribute"/>).
+            </para>
+            <para>
+            The minimum value for the <c>MaximumLenth</c> property is 1 and the maximum value is 2,048; and therefore the
+            largest string that can be stored in one property is 2,048 characters.
+            </para>
+            <para>
+            Regardless of the <c>MaximumLenth</c> value, you can store an empty or null string, but if you attempted
+            to store more characters then defined, then you will receive a <see cref="T:HSS.Data.Storage.ConstraintException"/>.
+            </para>
+            <para>
+            NOTE: In order to support your data models being used with the DataAnnotations library,
+            the HSS Database supports the use of the <c>StringLengthAttribute</c> in place of this
+            attribute. Also, take note, we only use the maximum length of this attribute not the
+            minimum, as the constraint is only meant to indicate the maximum length of the string
+            stored not whether or not it's a legimate value.
+            </para>
+            </remarks>
+            <example>
+            <code>
+            public class Program
+            {
+            	private void Main()
+            	{
+            		Database db = null;
+            		try
+            		{
+            			db = new Database("MyDatabaseName", "c:\MyDataFolderPath");
+            			var m = new MyModel() { ThreeCharString = "four" };
+            			db.Add(m);
+            		}
+            		catch (ConstraintException cex)
+            		{
+            			MessageBox.Show(cex.Message);
+            		}
+            	}
+            	class MyModel
+            	{
+            		[CharLength(3)]
+            		public string ThreeCharString { get; set; }
+            		
+            		[StringLength(100)]
+            		public string MyLongString { get; set; }
+            		
+            		[PrimaryKey(AutoIncrement = true)]
+            		public int Id { get; set; }
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="F:HSS.Data.Storage.CharLengthAttribute.MinimumValue">
+            <summary>
+            The minimum value of the MaximumLength property.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.CharLengthAttribute.MaximumValue">
+            <summary>
+            The maximum value of the MaximumLength property.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.CharLengthAttribute.#ctor(System.Int32)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="maximumLength">The maximum length of characters that can be stored.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.CharLengthAttribute.ValidateCharLenAttribute(System.Int32,System.String)">
+            <summary>
+            Validate the settings
+            </summary>
+            <param name="len"></param>
+            <param name="propertyName"></param>
+        </member>
+        <member name="P:HSS.Data.Storage.CharLengthAttribute.MaximumLength">
+            <summary>
+            Gets or sets the maximum length of characters that can be stored.
+            </summary>
+            <remarks>
+            The minimum value allowed for this property is 1 and the maximum value
+            for this property is 2048.
+            </remarks>
+        </member>
+        <member name="T:HSS.Data.Storage.ConstraintException">
+            <summary>
+            The exception that is thrown when the current operation violates a constraint.
+            </summary>
+            <example>
+            <code>
+            public class Program
+            {
+            	private void Main()
+            	{
+            		Database db = null;
+            		try
+            		{
+            			db = new Database("MyDatabaseName", "c:\MyDataFolderPath");
+            			var m = new MyModel() { ThreeCharString = "four" };
+            			db.Add(m);
+            		}
+            		catch (ConstraintException cex)
+            		{
+            			MessageBox.Show(cex.Message);
+            		}
+            		finally
+            		{
+            			if (null != db)
+            				db.Dispose();
+            		}
+            	}
+            	class MyModel
+            	{
+            		[CharLength(3)]
+            		public string ThreeCharString { get; set; }
+            		
+            		[PrimaryKey(AutoIncrement = true)]
+            		public int Id { get; set; }
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:HSS.Data.Storage.DatabaseException">
+            <summary>
+            The general exception that is thrown when a Database error occurs.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            protected serializable constructor
+            </summary>
+            <param name="info">SerializationInfo</param>
+            <param name="context">StreamingContext</param>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseException.#ctor">
+            <summary>
+            Initializes a new instance of the DatabaseException class.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the DatabaseException class with a specified error message.
+            </summary>
+            <param name="message">The message that describes the error.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the DatabaseException class with a specified error message and a reference to the inner exception that is the cause of this exception.
+            </summary>
+            <param name="message">The error message that explains the reason for the exception.</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        </member>
+        <member name="T:HSS.Data.Storage.Database">
+             <summary>
+             Provides transactional access to your data, and is the main entry point for all management, CRUD and Query operations.
+             </summary>
+             <remarks>
+             <para>
+             <note type="note">
+             Connection string and constructor overloads vary depending on the platform. See <see cref="T:HSS.Data.Storage.DatabaseConnectionString"/> for platform examples.
+             </note>
+             An instance of the Database object represents a 'connection' to a folder. The folder is for all intents and purposes your database.
+             Given that the HSS Database is a 'Client' database, there is no session or remote connection to a server, it runs in-process.
+             </para>
+             <para>
+             <note type="warning">
+             If you try to create a new database instance with a connection/folder of an already opened database (local or external) you will receive an exception.
+             </note>
+             There can only be a single open database instance per connection folder. In order to support connection/database instance sharing, you can
+             leverage the <see cref="T:HSS.Data.Storage.DatabaseConnectionPool"/>.
+             You can also create your own database context class to manage open connections for
+             a given folder.
+             </para>
+             <para>
+             For each <c>Type</c> of object stored in the database, there is a corresponding file, logically a Table. Having a file for each Table
+             allows for easy backup/restore and transporting copies of a single table's data if so desired.
+             </para>
+             <para>
+             The HSS Database provides support for ACID Compliant <see cref="T:HSS.Data.Storage.Transaction"/>s. If you do not wrap your calls in an explicit transaction, each individual
+             call with run inside of an implicit transaction.
+             </para>
+             </remarks>
+             <example>
+             <code>
+             public class Program
+             {
+            		private void Main()
+            		{
+            			Database.DeveloperEmail = "Your Email Address";
+            			Database.LicenseKey = "Your Developer License Key";
+            			
+            			var p = new Person();
+            			p.Id = 1;
+            			p.Name = "User1";
+            
+            			//
+            			// Connection strings vary depending on the platform.
+            			//
+            			
+            			//var connStrWithPwd = "name=myDbName;folder=c:\\mydatafolder;password=asdasdasd";
+            			var connStr = "name=myDbName;folder=c:\\mydatafolder";
+            			var db = new Database(connStr);
+            			
+            			-or-
+            			
+            			var db = new Database("myDbName", "c:\\myDataFolder");
+            			
+            			-or-
+            			
+            			var db = new Database("myDbName", "c:\\myDataFolder", "mypassword");
+            
+            			db.Add(p);
+            			db.Dispose();
+            
+                     // Or using IDisposable
+            			using (var db = new Database("MyDatabaseName", "c:\\MyDataFolderPath"))
+            			{
+                         var p = new Person();
+            			    p.Id = 1;
+            			    p.Name = "User1";
+            			    db.Add(p);
+            			}
+            		}
+            	}
+            	
+             public class Person
+             {
+            		public Person() { }
+            		
+            		public int Id { get; set; }
+            		[CharLength(64)] // OR [System.ComponentModel.DataAnnotations.StringLengthAttribute(64)]
+            		public string Name { get; set; }
+            	}
+            	</code>
+             </example>
+             <seealso cref="T:HSS.Data.Storage.DatabaseConnectionString"/>
+             <seealso cref="T:HSS.Data.Storage.DatabaseConnectionPool"/>
+             <seealso cref="T:HSS.Data.Storage.Transaction"/>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.#ctor(HSS.Data.Storage.DatabaseConnectionString)">
+            <summary>
+            Constructs a new instance and opens the database with the provided 
+            <see cref="T:HSS.Data.Storage.DatabaseConnectionString"/>.
+            </summary>
+            <param name="databaseConnectionString">A DatabaseConnectionString to open the database with.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.#ctor(System.String,System.String)">
+            <summary>
+            Constructs a new instance and opens the database with the provided 
+            folder.
+            </summary>
+            <param name="name">The name of the database.</param>
+            <param name="folder">The path of the folder where the databases files are stored</param>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Constructs a new instance (with encryption) and opens the database using the provided 
+            folder.
+            </summary>
+            <param name="name">The name of the database.</param>
+            <param name="folder">The path of the folder where the databases files are stored</param>
+            <param name="password">The password used for encryption/decryption.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.#ctor(System.String)">
+            <summary>
+            Constructs a new instance using the provided 
+            connectionString.
+            </summary>
+            <param name="connectionString">The connection string.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.#ctor(HSS.Data.Storage.DatabaseConnectionString,System.Boolean)">
+            <summary>
+            Pool connection constructor.
+            </summary>
+            <param name="databaseConnectionString">A DatabaseConnectionString to open the database with.</param>
+            <param name="isPooled"></param>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.CommonConstructor(HSS.Data.Storage.DatabaseConnectionString)">
+            <summary>
+            Common constructor for all platforms.
+            </summary>
+            <param name="connection"></param>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.ToString">
+            <summary>
+            Returns a friendly description.
+            </summary>
+            <returns>A friendly description.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.FromPool(System.String)">
+            <summary>
+            Creates and opens or gets a Database instance from the connection pool.
+            </summary>
+            <param name="connectionString">A valid connection string.</param>
+            <returns>An opened database instance.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.FromPool(HSS.Data.Storage.DatabaseConnectionString)">
+            <summary>
+            Creates and opens or gets a Database instance from the connection pool.
+            </summary>
+            <param name="connectionString">A valid <see cref="T:HSS.Data.Storage.DatabaseConnectionString"/> instance.</param>
+            <returns>An opened database instance.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Open">
+            <summary>
+            Opens the database.
+            </summary>	
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Add``1(``0)">
+            <summary>
+            Adds an object to the database.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object being added.</typeparam>
+            <param name="instance">The object to be added.</param>
+            <remarks>
+            <para>
+            Increments the DataVersion.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Cannot add a null object.</exception>
+            <exception cref="T:HSS.Data.Storage.ConstraintException">Cannot add a duplicate value to a unique index.</exception>
+            <exception cref="T:HSS.Data.Storage.ConstraintException">Cannot add a new object whose primary key has a value and AutoIncrement has been configured -or- does not have a value and AutoIncrement has not been configured.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <example>
+            <code>
+            //explicit transaction
+            Transaction trx = null;
+            try
+            {
+            	trx = Transaction.Begin();
+            	db.Add(obj);
+            	trx.Commit();
+            }
+            catch (Exception ex)
+            {
+            	if (null != trx)
+            		trx.RollBack();
+            	MessageBox.Show(ex.Message);
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.AddRange``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Adds the elements of the IEnumerable&lt;T&gt; to the database.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of objects being added.</typeparam>
+            <param name="range">The collection of objects being added.</param>
+            <remarks>
+            <para>
+            Increments the DataVersion for each object added.
+            </para>
+            </remarks>		
+            <exception cref="T:System.ArgumentNullException">Range is null.</exception>
+            <exception cref="T:System.NotSupportedException">Range contains one or more null objects.</exception>
+            <exception cref="T:HSS.Data.Storage.ConstraintException">Cannot add a duplicate value to a unique index.</exception>
+            <exception cref="T:HSS.Data.Storage.ConstraintException">Cannot add a new object whose primary key has a value and AutoIncrement has been configured -or- does not have a value and AutoIncrement has not been configured.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <para>
+            If the provided IEnumerable is a Query, it will be executed first, by calling 'ToList'.
+            </para>
+            <para>
+            Increments the DataVersion for each object added.
+            </para>
+            <example>
+            <code>
+            //implicit transaction
+            db.AddRange(objCollection);
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Set``1(``0)">
+            <summary>
+            Updates or adds the object to the database (Upsert).
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object being updated or added.</typeparam>
+            <param name="instance">The object being updated or added.</param>
+            <remarks>
+            <para>
+            If the passed instance does not provide a value for its primary key and it's configured to AutoIncrement,
+            then a call to this method will always attempt to add (insert) a new object.
+            If the primary key is not configured for AutoIncrement and the instance does not provide a value for
+            its primary key, then an ArgumentOutOfRangeException is thrown.
+            </para>
+            <para>
+            Increments the DataVersion if the object was updated or added.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">The instance provided was null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Cannot evaluate an object whose primary key does not have a value.</exception>
+            <exception cref="T:HSS.Data.Storage.ConstraintException">Cannot add or update an object whose primary key does not have a value and AutoIncrement is false.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.SetRange``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Updates or adds each element of the collection to the database (Upsert).
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object being updated or added.</typeparam>
+            <param name="range">The collection of objects being updated or added.</param>
+            <remarks>
+            <para>
+            This is a useful method for synchronizing the <see cref="T:HSS.Data.Storage.Database"/> from an external 
+            master data source such as a standard SQL DBMS.
+            </para>
+            <para>
+            If any of the instances do not provide a value for its primary key and it's configured to AutoIncrement,
+            then a call to this method will always attempt to add (insert) a new object.
+            If the primary key is not configured for AutoIncrement and any of the instances do not provide a value for
+            its primary key, then an ArgumentOutOfRangeException is thrown.
+            </para>
+            <para>
+            When used to synchronize from an external master data source, you typically would
+            set the DataVersion returned from the master data source marking your local copy as
+            now synchronized. Please see the <see cref="P:HSS.Data.Storage.Database.DataVersion"/> property for more information.
+            </para>
+            <para>
+            If the provided IEnumerable is a Query, it will be executed first, by calling 'ToList'.
+            </para>
+            <para>
+            Increments the DataVersion for each object updated or added.
+            </para>
+            </remarks>
+            <example>
+            Assuming you have a local collection of objects that you want to update or add to the database.
+            <code>
+            this.db.SetRange&lt;Person&gt;(coll);
+            </code>
+            </example>
+            <example>
+            Assuming you have a collection of objects from an external master data source that you want to update or add to this database.
+            <code>
+            var latestVersion = 12345; // Value from an external master data source
+            this.db.SetRange&lt;Person&gt;(coll);
+            this.db.DataVersion = latestVersion;
+            </code>
+            </example>
+            <exception cref="T:System.ArgumentNullException">The range provided was null.</exception>
+            <exception cref="T:System.NotSupportedException">The provided range contains one or more null objects.</exception>
+            <exception cref="T:HSS.Data.Storage.ConstraintException">Cannot add or update an object whose primary key does not have a value and AutoIncrement is false.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Update``1(``0)">
+            <summary>
+            Updates the database object, if the object already exist.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object being updated.</typeparam>
+            <param name="instance">The object instance that contains the updates.</param>
+            <remarks>
+            <para>
+            Increments the DataVersion if the object was updated.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Instance is null.</exception>
+            <exception cref="T:HSS.Data.Storage.DatabaseException">Object not found.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Cannot update an object whose primary key does not have a value.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.UpdateRange``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Updates the database where a matching object is found by Primary Key from the provided collection.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object being updated.</typeparam>
+            <param name="range">The collection of objects being updated.</param>
+            <remarks>
+            <para>
+            If the provided IEnumerable is a Query, it will be executed first, by calling 'ToList'.
+            </para>
+            <para>
+            Increments the DataVersion for each object updated.
+            </para>
+            </remarks>
+            <example>
+            Assuming you have a collection of objects that you want to update the database with.
+            <code>
+            this.db.UpdateRange&lt;Person&gt;(coll);
+            </code>
+            </example>
+            <exception cref="T:System.ArgumentNullException">Range is null.</exception>
+            <exception cref="T:System.NotSupportedException">Range contains one or more null objects.</exception>
+            <exception cref="T:HSS.Data.Storage.DatabaseException">Object not found.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Cannot update an object whose primary key does not have a value.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.UpdateAll``1(System.Action{``0})">
+            <summary>
+            An convenience method for updating all records.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to query.</typeparam>
+            <param name="updateAction">The action delegate to call, where the update will be performed.</param>
+            <remarks>
+            <para>
+            If a call to this method is not already wrapped in a transaction, then
+            this call will execute within it's own transaction.
+            </para>
+            </remarks>
+            <example>
+            <para>
+            Example to update all records.
+            </para>
+            <code>
+            database.UpdateAll&lt;Customer&gt;(c =&gt; c.City = "new city");
+            </code>	
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.UpdateWhere``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Action{``0})">
+            <summary>
+            An optimized method for updating records based on the provided predicate.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to query.</typeparam>
+            <param name="predicate">The predicate to apply.</param>
+            <param name="updateAction">The action delegate to call, where the update will be performed.</param>
+            <remarks>
+            <para>
+            If a call to this method is not already wrapped in a transaction, then
+            this call will execute within it's own transaction.
+            </para>
+            </remarks>
+            <example>
+            <para>
+            Example to update records given some criteria.
+            </para>
+            <code>
+            database.UpdateWhere&lt;Customer&gt;(c =&gt; c.CustomerID &gt; 10, c =&gt; c.City = "new city");
+            </code>	
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Remove``1(System.IComparable)">
+            <summary>
+            Removes an object from the database with a matching Primary Key.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to remove.</typeparam>
+            <param name="key">The Primary Key of the object to remove.</param>
+            <remarks>
+            <para>
+            Increments the DataVersion if the object was removed.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Key is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Cannot remove an object with a primary key that does not have a value.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Remove``1(``0)">
+            <summary>
+            Removes an object from the database where the Primary Key matches the Primary Key of the provided object.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to remove.</typeparam>
+            <param name="instance">The object to remove.</param>
+            <remarks>
+            <para>
+            Increments the DataVersion if the object was removed.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Instance is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Cannot remove an object whose primary key does not have a value.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RemoveRange``2(System.Collections.Generic.IEnumerable{``1})">
+            <summary>
+            Removes a range of objects from the database with a matching Primary Key.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to remove.</typeparam>
+            <typeparam name="TKey">The <see cref="T:System.Type"/> of keys to remove.</typeparam>
+            <param name="keys">The collection to Primary Keys to remove.</param>
+            <remarks>
+            <para>
+            If the provided IEnumerable is a Query, it will be executed first, by calling 'ToList'.
+            </para>
+            <para>
+            Increments the DataVersion for each object removed.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Range is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Cannot remove an object whose primary key does not have a value.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RemoveRange``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            Removes a range of objects from the database with a matching Primary Key.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to remove.</typeparam>
+            <param name="range">The collection to remove.</param>
+            <remarks>
+            <para>
+            If the provided IEnumerable is a Query, it will be executed first, by calling 'ToList'.
+            </para>
+            <para>
+            Increments the DataVersion for each object removed.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Range is null.</exception>
+            <exception cref="T:System.ArgumentOutOfRangeException">Cannot remove an object whose primary key does not have a value.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RemoveAll``1">
+            <summary>
+            A special method that removes all objects from a table as a single bulk operation.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to remove.</typeparam>
+            <remarks>
+            <para>
+            <b>NOTE:</b> This is a single operation method and cannot be run from an existing transaction.
+            </para>
+            <para>
+            Removes all objects from a table, but the table structure and its columns, constraints, indexes and so on remain. The counter used by an identity for new rows
+            is NOT reset. If you want to reset the identity counter, use <see cref="M:HSS.Data.Storage.Database.Truncate``1"/> instead. If you want to remove the table definition and its data, use the
+            <see cref="M:HSS.Data.Storage.Database.DropTable``1"/> method.
+            </para>
+            <para>
+            This is the similar to SQL 'Delete * FROM' without a WHERE clause.
+            </para>
+            <para>
+            Increments the DataVersion for each object removed.
+            </para>
+            </remarks>
+            <exception cref="T:System.NotSupportedException">Cannot call this method from within an existing transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RemoveWhere``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            An optimized method for removing records based on the provided predicate.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to remove.</typeparam>
+            <param name="predicate">The predicate to apply.</param>
+            <remarks>
+            <para>
+            If a call to this method is not already wrapped in a transaction, then
+            this call will execute within it's own transaction.
+            </para>
+            </remarks>
+            <example>
+            <para>
+            Example to remove all records given some predicate.
+            </para>
+            <code>
+            database.RemoveWhere&lt;Customer&gt;(c =&gt; c.CustomerID &gt; 10 &amp;&amp; c.CustomerID &lt; 20);
+            </code>	
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Truncate``1">
+            <summary>
+            A special call that removes all objects from a table and resets the primary key AutoIncrement seed value.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to be truncated.</typeparam>
+            <remarks>
+            <para>
+            <b>NOTE:</b> This is a single operation method and cannot be run from an existing transaction.
+            </para>
+            <para>
+            Truncate is functionally identical to RemoveAll.
+            </para>
+            <para>
+            Truncate removes all rows from a table, but the table structure and its columns, constraints, indexes and so on remain. The counter used by an identity for new rows
+            is reset to the seed for the column. If you want to retain the identity counter, use <see cref="M:HSS.Data.Storage.Database.RemoveAll``1"/> instead. If you want to remove the table definition and its data, use the
+            <see cref="M:HSS.Data.Storage.Database.DropTable``1"/> method.
+            </para>
+            <para>
+            Does not increment the DataVersion.
+            </para>
+            </remarks>
+            <exception cref="T:System.NotSupportedException">Cannot call this method from within an existing transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.TruncateDatabase">
+            <summary>
+            A special call that truncates the entire database by deleting all files.
+            </summary>
+            <remarks>
+            <para>
+            <b>NOTE:</b> This is a single operation method and cannot be run from an existing transaction.
+            </para>
+            <para>
+            Resets the DataVersion to zero.
+            </para>
+            </remarks>
+            <exception cref="T:System.NotSupportedException">Cannot call this method from within an existing transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.DropTable``1">
+            <summary>
+            A special call that drops the requested table from the database, by deleting its data file.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of Table to be dropped.</typeparam>
+            <remarks>
+            <para>
+            <b>NOTE:</b> This is a single operation method and cannot be run from an existing transaction.
+            </para>
+            <para>
+            Does not increment the DataVersion.
+            </para>
+            </remarks>
+            <exception cref="T:System.NotSupportedException">Cannot call this method from within an existing transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.TruncateFolder(System.String)">
+            <summary>
+            Attempts to delete all files located in the specified folder.
+            </summary>
+            <param name="folder">The folder to truncate.</param>
+            <exception cref="T:System.InvalidOperationException">Cannot truncate the folder of an open database.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Query``1">
+            <summary>
+            Creates a <see cref="T:HSS.Data.Storage.DatabaseQuery`1"/> instance used for executing a LINQ query.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> to query.</typeparam>
+            <returns>An <see cref="T:System.Linq.IQueryable`1"/> of the Type requested.</returns>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <remarks>
+            <para>
+            All Queries support the use of Transactions, either implicit or explicit and always operate under a TABLE lock.
+            </para>
+            <para>
+            You do not need to use this to find a single object by it's id (PrimaryKey). If you need to
+            locate an individual object by it's Id, use either the <see cref="M:HSS.Data.Storage.Database.Get(System.IComparable,System.Type)"/> or <see cref="M:HSS.Data.Storage.Database.Get``1(System.IComparable)"/> method.
+            </para>
+            </remarks>
+            <example>
+            <para>Find the first object where the MyInt property matches some value.</para>
+            <code>
+            
+            // LINQ Methods with an implicit transaction
+            var found = this.db.Query&lt;Person&gt;().FirstOrDefault(p =&gt; p.MyInt == SomeInt);
+            
+            // Lambda Query
+            var query = from Person p in this.db
+            			where p.MyInt == someInt
+            			select p;
+            	
+            // The internal call to GetEnumerator executes with an implicit transaction.
+            // The iterating over the results of the query is not part of the transaction.
+            foreach (var p in query)
+            	Console.WriteLine(p.myInt);
+            
+            // -or-
+            
+            // Executes with an implicit transaction
+            var found = query.FirstOrDefault();
+            	
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.GetQueryableTable``1">
+            <summary>
+            Get an ITableQueryable Table instance.
+            </summary>
+            <typeparam name="T">The Type of the Table.</typeparam>
+            <returns>The ITableQueryable instance.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Get``1(System.IComparable)">
+            <summary>
+            Attempts to locate an object by it's Primary Key.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to get.</typeparam>
+            <param name="key">The Primary Key of the object to get.</param>
+            <returns>The activated object if found; otherwise null.</returns>
+            <remarks>
+            <para>
+            This is the fastest way to retrieve an object. It locates the object by it's primary key
+            and only activates that object, if the key was found.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Key is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Get(System.IComparable,System.Type)">
+            <summary>
+            Attempts to locate an object by it's Primary Key.
+            </summary>
+            <param name="key">The Primary Key of the object to get.</param>
+            <param name="type">The <see cref="T:System.Type"/> of object to get.</param>
+            <returns>The activated object if found; otherwise null.</returns>
+            <remarks>
+            <para>
+            This is the fastest way to retrieve an object. It locates the object by it's primary key
+            and only activates that object, if the key was found.
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Key is null.</exception>
+            <exception cref="T:System.ArgumentNullException">Type is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.GetAll``1">
+            <summary>
+            Activates and returns an array of all objects.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of objects to get.</typeparam>
+            <returns>An array of all the objects in the table.</returns>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <remarks>
+            <note type="note">
+            For tables with a large number of records, a call to this method can result
+            in an out of memory exception.
+            </note>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.GetAll(System.Type)">
+            <summary>
+            Activates and returns an array of all objects.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> of objects to get.</param>
+            <returns>An array of all the objects in the table.</returns>
+            <exception cref="T:System.ArgumentNullException">Type is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <remarks>
+            <note type="note">
+            For tables with a large number of records, a call to this method can result
+            in an out of memory exception.
+            </note>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RecordCount``1">
+            <summary>
+            Gets the estimated number of objects currently stored for the provided type, based on the last successfully completed transaction.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> to retrieve the count for.</typeparam>
+            <returns>The number of objects stored for the requested type if it exists; otherwise -1.</returns>
+            <remarks>
+            <para>
+            This method call does not particiapte in a transaction, so will return the last known count based on
+            the last successfully completed transaction.
+            </para>
+            <para>
+            To determine the count of an uncommitted transaction, you must execute a query (this.db.Query&lt;T&gt;().Count()).
+            </para>
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RecordCount(System.Type)">
+            <summary>
+            Gets the estimated number of objects currently stored for the provided type, based on the last successfully completed transaction.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> to retrieve the count for.</param>
+            <returns>The number of objects stored for the requested type if it exists; otherwise -1.</returns>
+            <remarks>
+            <para>
+            This method call does not particiapte in a transaction, so will return the last known count based on
+            the last successfully completed transaction.
+            <para>
+            To determine the count of an uncommitted transaction, you must execute a query (this.db.Query&lt;T&gt;().Count()).
+            </para>
+            </para>
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">Type is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.GetLastWriteTime``1">
+            <summary>
+            Gets the LastWriteTime of the DataFile for the type specified if it's file exists.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to retrieve the last write time for.</typeparam>
+            <returns>The date and time that the file was last written to, if a file exists; otherwise DateTimeOffset.MinValue.</returns>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.GetLastWriteTime(System.Type)">
+            <summary>
+            Gets the LastWriteTime of the DataFile for the type specified if it's file exits.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> of object to retrieve the last write time for.</param>
+            <returns>The date and time that the file was last written to, if a file exists; otherwise DateTimeOffset.MinValue.</returns>
+            <exception cref="T:System.ArgumentNullException">Type is null.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.FileSize``1">
+            <summary>
+            If a file exists, determines the size of the file.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to check.</typeparam>
+            <returns>The size of the data file if it exists; otherwise -1;</returns>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.FileSize(System.Type)">
+            <summary>
+            If a file exists, determines the size of the file.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> of object to check.</param>
+            <returns>The size of the data file if it exists; otherwise -1;</returns>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.GetFilePath``1">
+            <summary>
+            Gets the path to the file.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to retrieve the file path for.</typeparam>
+            <returns>The path to the file, if a file exists, for the type specified; otherwise an empty string.</returns>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.GetFilePath(System.Type)">
+            <summary>
+            Gets the path to the file.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> of object to retrieve the file path for.</param>
+            <returns>The path to the file, if a file exists, for the type specified; otherwise an empty string.</returns>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RestoreTable(System.String,System.String)">
+            <summary>
+            Perform a restore operation for the requested type from the provided backup file.
+            </summary>
+            <param name="connectionString">The connection string of the database to restore the table to.</param>
+            <param name="backupFilePath">The absolute or relative path of the backup file to restore the table from.</param>
+            <exception cref="T:System.ArgumentNullException">connectionString parameter is null.</exception>
+            <exception cref="T:System.ArgumentNullException">tableType parameter is null.</exception>
+            <exception cref="T:System.ArgumentException">backupFilePath is null or an empty string.</exception>
+            <exception cref="T:HSS.Data.Storage.DatabaseException">Incorrect file extension for backupFilePath.</exception>
+            <remarks>
+            <para>
+            Restoration requires no other database instances opened for a given database folder.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RestoreTable(HSS.Data.Storage.DatabaseConnectionString,System.String)">
+            <summary>
+            Perform a restore operation from the provided backup file.
+            </summary>
+            <param name="connectionString">The <see cref="T:HSS.Data.Storage.DatabaseConnectionString"/> of the database to restore the table to.</param>
+            <param name="backupFilePath">The absolute or relative path of the backup file to restore the table from.</param>
+            <exception cref="T:System.ArgumentNullException">connectionString parameter is null.</exception>
+            <exception cref="T:System.ArgumentException">backupFilePath is null or an empty string.</exception>
+            <exception cref="T:System.TypeLoadException">Unable to resolve the requested table type.</exception>
+            <exception cref="T:HSS.Data.Storage.DatabaseException">Incorrect file extension for backupFilePath.</exception>
+            <exception cref="T:HSS.Data.Storage.DatabaseException">The provided restore file is missing, corrupt or unreadable. Please try a different file.</exception>
+            <remarks>
+            <para>
+            Restoration requires no other database instances opened for a given database folder.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.RestoreTableCore(HSS.Data.Storage.Header,System.String)">
+            <summary>
+            Perform the actual restoration.
+            </summary>
+            <param name="header"></param>
+            <param name="backupFilePath"></param>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.BackupTable``1(System.String)">
+            <summary>
+            Perform a backup up for the requested type.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to backup.</typeparam>
+            <param name="backupFolder">The folder path where to back up the data to.</param>	
+            <returns>The path to the newly created back up file if the back up completed; otherwise an empty string.</returns>
+            <exception cref="T:System.ArgumentException">The provided string argument must not be null.</exception>
+            <exception cref="T:System.IO.IOException">A backup file already exists.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <remarks>
+            Performing a backup of an HSS Database Table is merely a copy of the current data file, with a different extension.
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.BackupTable(System.Type,System.String)">
+            <summary>
+            Perform a backup up for the requested type.
+            </summary>
+            <param name="tableType">The <see cref="T:System.Type"/> of object to backup.</param>
+            <param name="backupFolder">The folder path where to back up the data to.</param>	
+            <returns>The path to the newly created back up file if the back up completed; otherwise an empty string.</returns>
+            <exception cref="T:System.ArgumentException">The provided string argument must not be null.</exception>
+            <exception cref="T:System.IO.IOException">A backup file already exists.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <remarks>
+            Performing a backup of an HSS Database Table is merely a copy of the current data file, with a different extension.
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Backup">
+            <summary>
+            Perform a backup up all tables.
+            </summary>
+            <returns>The folder where the back up files where created.</returns>
+            <exception cref="T:System.Exception">Unsupported backup directory provided. Performing a backup into the database folder is not supported, please choose a different folder.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <remarks>
+            <para>
+            The default back up folder is a child directory of the database folder named bak; example ..\{Database.Folder}\bak.
+            </para>
+            <para>
+            The file(s) backed up, are given the file extension of .hssbak
+            </para>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Backup(System.String)">
+            <summary>
+            Perform a backup up all tables.
+            </summary>
+            <param name="backupFolder">The folder path where to back up the data to.</param>	
+            <exception cref="T:System.ArgumentException">The provided string argument must not be null.</exception>
+            <exception cref="T:System.Exception">Unsupported backup directory provided. Performing a backup into the database folder is not supported, please choose a different folder.</exception>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+            <remarks>
+            <para>
+            The file(s) backed up, are given the file extension of .hssbak
+            </para>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.IsSupportedType``1">
+            <summary>
+            Determines if the provided Type is a supported type that can be saved to the database.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> to check.</typeparam>
+            <returns>True if the type is supported; otherwise false.</returns>
+            <remarks>
+            <para>All types from mscorlib.dll that implement the IConvertable interface are supported, and also TimeSpan, Guid and Nullable&lt;T&gt; where T is also a supported type.</para>
+            <list type="table">
+            <listheader><description>The following is the list of supported types.</description></listheader>
+            <item><description>Boolean</description></item>
+            <item><description>Byte</description></item>
+            <item><description>Char</description></item>
+            <item><description>DateTime</description></item>
+            <item><description>DateTimeOffset</description></item>
+            <item><description>Decimal</description></item>
+            <item><description>Double</description></item>
+            <item><description>Enum</description></item>
+            <item><description>Int16</description></item>
+            <item><description>Int32</description></item>
+            <item><description>Int64</description></item>
+            <item><description>SByte</description></item>
+            <item><description>Single</description></item>
+            <item><description>String</description></item>
+            <item><description>UInt16</description></item>
+            <item><description>UInt32</description></item>
+            <item><description>UInt64</description></item>
+            <item><description>TimeSpan</description></item>
+            <item><description>Guid</description></item>
+            <item><description>Nullable&lt;T&gt; where T is a supported type.</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.IsSupportedType(System.Type)">
+            <summary>
+            Determines if the provided Type is a supported type that can be saved to the database.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> to check.</param>
+            <returns>True if the type is supported; otherwise false.</returns>
+            <remarks>
+            <para>All types from mscorlib.dll that implement the IConvertable interface are supported, and also TimeSpan, Guid and Nullable&lt;T&gt; where T is also a supported type.</para>
+            <list type="table">
+            <listheader><description>The following is the list of supported types.</description></listheader>
+            <item><description>Boolean</description></item>
+            <item><description>Byte</description></item>
+            <item><description>Char</description></item>
+            <item><description>DateTime</description></item>
+            <item><description>DateTimeOffset</description></item>
+            <item><description>Decimal</description></item>
+            <item><description>Double</description></item>
+            <item><description>Enum</description></item>
+            <item><description>Int16</description></item>
+            <item><description>Int32</description></item>
+            <item><description>Int64</description></item>
+            <item><description>SByte</description></item>
+            <item><description>Single</description></item>
+            <item><description>String</description></item>
+            <item><description>UInt16</description></item>
+            <item><description>UInt32</description></item>
+            <item><description>UInt64</description></item>
+            <item><description>TimeSpan</description></item>
+            <item><description>Guid</description></item>
+            <item><description>Nullable&lt;T&gt; where T is a supported type.</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.IsSupportedPrimaryKeyType(System.Type)">
+            <summary>
+            Determines if the provided Type is a supported Primary Key type that can be used to save objects to the database.
+            </summary>
+            <param name="type">The type to check.</param>
+            <returns>true if supported; otherwise false.</returns>
+            <remarks>
+            <list type="table">
+            <listheader><description>The following are the supported Primary Key types.</description></listheader>
+            <item><description>Int32</description></item>
+            <item><description>Int64</description></item>
+            <item><description>Guid</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.IsSupportedPrimaryKeyType``1">
+            <summary>
+            Determines if the provided Type is a supported Primary Key type that can be used to save objects to the database.
+            </summary>
+            <typeparam name="T">The type to check.</typeparam>
+            <returns>true if supported; otherwise false.</returns>
+            <remarks>
+            <list type="table">
+            <listheader><description>The following are the supported Primary Key types.</description></listheader>
+            <item><description>Int32</description></item>
+            <item><description>Int64</description></item>
+            <item><description>Guid</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Finalize">
+            <summary>
+            Finalize the Database.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.Database.Dispose">
+            <summary>
+            Closes the database, releasing the files and resources.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.FileEncoding">
+            <summary>
+            Gets the encoding for the database files (UTF8 is currently the only supported encoding).
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.DeveloperEmail">
+            <summary>
+            Gets or sets the licensed developer's email address.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.LicenseKey">
+            <summary>
+            Gets or sets the licensed Key.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.Name">
+            <summary>
+            Gets the name of this database.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.Folder">
+            <summary>
+            Gets the folder where the files are stored for this database.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.IsEncrypted">
+            <summary>
+            Gets if the Database files are encrypted.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.DataVersion">
+            <summary>
+            Gets or sets the Databases version number.
+            </summary>
+            <returns>The DataVersion; or 0 if this is the first time the database is being accessed.</returns>
+            <remarks>
+            <para>
+            The DataVersion value is similar to MS SQL Change Tracking VERSION, in that everytime
+            an object is added, updated or deleted, the version is incremented but the change itself
+            is not captured or retained.
+            </para>
+            <para>
+            This is useful when the <see cref="T:HSS.Data.Storage.Database"/> is used as a synchronization client where
+            you want to set the <c>DataVersion</c> equal to the Version from your remote master data source.
+            When using as a synchronization client you could delete all the objects first, then re-insert all the objects
+            from the external master data source.
+            </para>
+            <para>
+            You could also use the <see cref="M:HSS.Data.Storage.Database.SetRange``1(System.Collections.Generic.IEnumerable{``0})"/> method to first
+            update or add any modified objects to the database and then call the
+            <see cref="M:HSS.Data.Storage.Database.RemoveRange``2(System.Collections.Generic.IEnumerable{``1})"/> or 
+            <see cref="M:HSS.Data.Storage.Database.RemoveRange``1(System.Collections.Generic.IEnumerable{``0})"/>
+            method to delete any objects that have been deleted from the master data source and finally setting the 
+            DataVersion.
+            </para>
+            <para>
+            <b>NOTE:</b> The version is not incremented if the schema is changed.
+            </para>
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.IsOpen">
+            <summary>
+            Gets if the database is currently open.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.Schema">
+            <summary>
+            Gets the schema for this database.
+            </summary>
+            <returns>The <see cref="T:HSS.Data.Storage.DatabaseSchema"/>.</returns>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.ConnectionString">
+            <summary>
+            Gets the current connection string, that was used to open this database instance.
+            </summary>
+            <returns>
+            A string containing the ConnectionString, that was used to open the database.
+            </returns>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.IsPooledConnection">
+            <summary>
+            Gets if this instance is a pooled connection.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Database.TotalRecords">
+            <summary>
+            Gets the estimated total number of objects currently stored in the database, based on the last successfully completed transaction.
+            </summary>
+            <returns>Total number of objects stored in the database.</returns>
+            <remarks>
+            <para>
+            This method call does not particiapte in a transaction, so will return the last known count based on
+            the last successfully completed transaction for each table.
+            </para>
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">Database is not opened.</exception>
+        </member>
+        <member name="T:HSS.Data.Storage.DatabaseConnectionPool">
+            <summary>
+            A pool of open Database connections.
+            </summary>
+            <remarks>
+            <para>
+            Maintains a pool of one or more open connections that can be reused or shared
+            through out your application.
+            </para>
+            <para>
+            By default, you're required to monitor your applications
+            exiting, suspending and resuming events to ensure you
+            release any assoicated files used by your application.
+            </para>
+            <para>
+            <note type="warning">
+            AutoExit is ignored for MonoTouch and Mono for Android.
+            </note>
+            <note type="warning">
+            If you turn on this feature, there is a chance that it could reset or
+            suspend the connection pool prior to you saving your data, and therefore
+            is only recommended for scenarios where you don't plan to save or load data
+            during these application life cycle events.
+            </note>
+            Optionally, you can indicate the connection pool monitors the
+            applications exit, suspending and resuming events and automatically
+            perform the appropriate action for the platform. You can turn on
+            this feature by setting the <see cref="P:HSS.Data.Storage.DatabaseConnectionPool.AutoExit"/> property to True
+            prior to accessing the <see cref="P:HSS.Data.Storage.DatabaseConnectionPool.Shared"/> property for the first time.
+            </para>
+            </remarks>
+            <example>
+            <para>
+            Reset, suspend or resume the connection pool
+            </para>
+            <code>
+            public App()
+            {
+            	//
+            	// .NET, Silverlight or Mono Platforms
+            	//
+            	AppDomain.CurrentDomain.ProcessExit += (s, e) =&gt; 
+            	{
+            		// save any global changes as necessary
+            		DatabaseConnectionPool.Shared.Reset();
+            	}
+            	
+            	//
+            	// Windows 8 (Windows Runtime)
+            	//
+            	Windows.UI.Xaml.Application.Current.Resuming += (s, e) =&gt;
+            	{
+            		DatabaseConnectionPool.Shared.Resume();
+            		// load any global changes as necessary
+            	};
+            	Windows.UI.Xaml.Application.Current.Suspending += (s, e) =&gt;
+            	{
+            		var deferral = e.SuspendingOperation.GetDeferral();
+            		// save any global changes as necessary
+            		DatabaseConnectionPool.Shared.Suspend();
+            		deferral.Complete();
+            	};
+            	
+            	//
+            	// Windows Phone 7.1 or 8
+            	//
+            	System.Windows.Application.Current.Activated += (s, e) =&gt;
+            	{
+            		DatabaseConnectionPool.Shared.Resume();
+            		// load any global changes as necessary
+            	};
+            	System.Windows.Application.Current.Deactivated += (s, e) =&gt;
+            	{
+            		// save any global changes as necessary
+            		DatabaseConnectionPool.Shared.Suspend();
+            	};
+            	System.Windows.Application.Current.Closing += (s, e) =&gt;
+            	{
+            		// save any global changes as necessary
+            		DatabaseConnectionPool.Shared.Reset();
+            	};
+            	
+            	// Normal database licensing information
+            	Database.LicenseKey = "your license";
+            	Database.DeveloperEmail = "your email";
+            	
+            	// Rest of your app init and start up code
+            	
+            }
+            </code>
+            <para>
+            -OR- register for and use the AutoExit feature
+            </para>
+            <code>
+            public App()
+            {
+            	// Should be the first call during application start up
+            	// if you want to enable this feature
+            	DatabaseConnectionPool.AutoExit = true;
+            	
+            	// Normal database licensing information
+            	Database.LicenseKey = "your license";
+            	Database.DeveloperEmail = "your email";
+            	
+            	// Rest of your app init and start up code
+            	
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionPool.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionPool.GetConnection(HSS.Data.Storage.DatabaseConnectionString)">
+            <summary>
+            Gets or creates a new connection.
+            </summary>
+            <param name="connectionString">The <see cref="T:HSS.Data.Storage.DatabaseConnectionString"/> to open.</param>
+            <returns>A <see cref="T:HSS.Data.Storage.Database"/> instance.</returns>
+            <exception cref="T:System.ArgumentNullException">The connectionString provided was null.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionPool.TryGetExisting(HSS.Data.Storage.DatabaseConnectionString,HSS.Data.Storage.Database@)">
+            <summary>
+            Tries to get a connection from the Pool, only if one already exists.
+            </summary>
+            <param name="connectionString">The <see cref="T:HSS.Data.Storage.DatabaseConnectionString"/> to open.</param>
+            <param name="database">The <see cref="T:HSS.Data.Storage.Database"/> instance, if found.</param>
+            <returns>true if the entry was found; otherwise false.</returns>
+            <exception cref="T:System.ArgumentNullException">The connectionString provided was null.</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionPool.Reset">
+            <summary>
+            Closes all <see cref="T:HSS.Data.Storage.Database"/> connections managed by this pool.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseConnectionPool.AutoExit">
+            <summary>
+            Gets or sets if the connection pool should monitor
+            the exit, suspend and resume events and perform the
+            appropriate action for the current platform.
+            </summary>
+            <remarks>
+            <para>
+            <note type="warning">
+            This property is ignored for MonoTouch and Mono for Android.
+            </note>
+            This property is only evaluated once, when the <see cref="P:HSS.Data.Storage.DatabaseConnectionPool.Shared"/>
+            property is accessed for the first time. After that the value of
+            this property is ignored.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseConnectionPool.Shared">
+            <summary>
+            Gets the singleton instance of the connection pool.
+            </summary>
+            <remarks>
+            <para>
+            <note type="warning">
+            AutoExit is ignored for MonoTouch and Mono for Android.
+            </note>
+            If the <see cref="P:HSS.Data.Storage.DatabaseConnectionPool.AutoExit"/> property is True, then the first
+            time this property is accessed and the pool is created, it will
+            register for the apppropriate Exit or Suspending event.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:HSS.Data.Storage.DatabaseConnectionString">
+            <summary>
+            An HSS Database Connection String object. (see remarks for samples)
+            </summary>
+            <remarks>
+            <para>
+            A connection string requires at least the folder value. The other fields
+            can be ommited.
+            </para>
+            <para>
+            <b>Note for Silverlight 5</b>: iso=[true|false] is defaulted to <c>True</c> if ommited. The iso value
+            also indicates if your application is running in the browser or out of the browser. So if <code>iso == true</code>
+            would indicate your application is NOT running out of browser.
+            </para>
+            <para>
+            <b>Sample connection strings for the different platforms</b>
+            </para>
+            <list type="table">
+            <listheader><description>Windows Phone 7.5/8.0</description></listheader>
+            <item><description>"name=myDbName;folder=myDbFolder;"</description></item>
+            <item><description>"name=myDbName;folder=myDbFolder;password=askdashjkjsd;"</description></item>
+            </list>
+            <list type="table">
+            <listheader><description>Windows RT</description></listheader>
+            <item><description>"name=myDbName;folder=myDbFolder;"</description></item>
+            <item><description>"name=myDbName;folder=myDbFolder;password=askdashjkjsd;"</description></item>
+            </list>
+            <list type="table">
+            <listheader><description>Silverlight 5</description></listheader>
+            <item><description>"name=myDbName;folder=myDbFolder" (In the Browser)</description></item>
+            <item><description>"name=myDbName;folder=myDbFolder;password=askdashjkjsd" (In the Browser)</description></item>
+            <item><description>"name=myDbName;folder=c:\\myDbFolder;iso=false" (Out of Browser)</description></item>
+            <item><description>"name=myDbName;folder=c:\\myDbFolder;password=askdashjkjsd;iso=false;" (Out of Browser)</description></item>
+            </list>
+            <list type="table">
+            <listheader><description>Mono for Android</description></listheader>
+            <item><description>"name=myDbName;folder=" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "myDbFolder")</description></item>
+            <item><description>"name=myDbName;folder=" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "myDbFolder") + ";password=askdashjkjsd;"</description></item>
+            </list>
+            <list type="table">
+            <listheader><description>MonoTouch</description></listheader>
+            <item><description>"name=myDbName;folder=" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "myDbFolder")</description></item>
+            <item><description>"name=myDbName;folder=" + Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "myDbFolder") + ";password=askdashjkjsd;"</description></item>
+            </list>
+            <list type="table">
+            <listheader><description>Microsoft .NET</description></listheader>
+            <item><description>"name=myDbName;folder=c:\\myDbFolder;"</description></item>
+            <item><description>"name=myDbName;folder=c:\\myDbFolder;password=askdashjkjsd;"</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="F:HSS.Data.Storage.DatabaseConnectionString.PwdChar">
+            <summary>
+            A black circle (0x25CF) which can be used as a Mask for passwords
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionString.#ctor(System.String,System.String)">
+            <summary>
+            Creates a new connection string instance.
+            </summary>
+            <param name="name">The name of the database.</param>
+            <param name="folder">The name or path of the folder where the databases files are stored</param>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionString.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Creates a new connection string instance.
+            </summary>
+            <param name="name">The name of the database.</param>
+            <param name="folder">The name or path of the folder where the databases files are stored</param>
+            <param name="password">The password to access to the database.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionString.#ctor(System.String)">
+            <summary>
+            Creates a new instance based on the provided string.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionString.ToString">
+            <summary>
+            Gets the string representation of this instance.
+            </summary>
+            <returns>The string representation of this instance.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionString.FromString(System.String)">
+            <summary>
+            Create a new <see cref="T:HSS.Data.Storage.DatabaseConnectionString"/> instance
+            from the provided string.
+            </summary>
+            <param name="connectionString">The connection string to create from.</param>
+            <returns>A new <see cref="P:HSS.Data.Storage.DatabaseConnectionString.ConnectionString"/> instance.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseConnectionString.InitFromString(System.String)">
+            <summary>
+            Parse the connection string.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseConnectionString.ConnectionString">
+            <summary>
+            The current connection string.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseConnectionString.DatabaseName">
+            <summary>
+            The name of the database.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseConnectionString.DatabaseFolder">
+            <summary>
+            The folder name or path where the database files are stored.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseConnectionString.DatabasePassword">
+            <summary>
+            The optional password if the database is encrypted.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.DatabaseExtensions">
+            <summary>
+            Extensions to support LINQ queries.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseExtensions.Cast``1(HSS.Data.Storage.Database)">
+             <summary>
+             A convenience method for casting a database instance to a <see cref="T:HSS.Data.Storage.DatabaseQuery`1"/>, based on the query expression Type.
+             </summary>
+             <typeparam name="T">The Type (Table) of records to query.</typeparam>
+             <param name="database">A database instance containing the table to query from.</param>
+             <returns>A new <see cref="T:HSS.Data.Storage.DatabaseQuery`1"/> instance.</returns>
+             <remarks>
+             <para>
+             This is used silently for lambda query expressions.
+             </para>
+             </remarks>
+             <example>
+             <para>
+             Example showing how to use the Cast extension method. Behind the scenes, the .NET LINQ Query internals will 
+             search for and use this Cast extension method, which simply calls database.Query&lt;T&gt;().
+             </para>
+             <note type="note">Note the Model casting (from Model m in ...) in the first query expression.</note>
+             <code>
+             var query = from Model m in database
+            				where m.Age &gt; 30
+            				select m;
+            
+             // Functional equivalent without requiring a call to the Cast extension method.
+             var query = from m in database.Query&lt;Model&gt;()
+            				where m.Age &gt; 30
+            				select m;
+             </code>
+             </example>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseExtensions.ForEach``1(HSS.Data.Storage.Database,System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Action{``0})">
+            <summary>
+            A convenience method for filtering a table, and then calling an action for each record in the result set.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to query.</typeparam>
+            <param name="database">A database instance containing the table to query from.</param>
+            <param name="predicate">The predicate to apply.</param>
+            <param name="action">The action to call.</param>
+            <example>
+            <para>
+            If a call to this method is not already wrapped in a transaction, then
+            this call will execute within it's own transaction.
+            </para>
+            <para>
+            Example using ForEach to perform some action against the filtered record set.
+            </para>
+            <code>
+            db.ForEach&lt;Customer&gt;(
+            	c =&gt; c.Name.StartWith("A"),
+            	c =&gt; Action(c)
+            );
+            </code>
+            <para>
+            Manual way of acheiving the same results as above.
+            </para>
+            <code>
+            var results = db.Query&lt;Customer&gt;().Where(c =&gt; c.Name.StartWith("A"));
+            foreach (var r in results)
+            	Action(r);
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseExtensions.ForAll``1(HSS.Data.Storage.Database,System.Action{``0})">
+            <summary>
+            A convenience method for performing an action against all the records in a table.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to query.</typeparam>
+            <param name="database">A database instance containing the table to query from.</param>
+            <param name="action">The action to call.</param>
+            <example>
+            <para>
+            If a call to this method is not already wrapped in a transaction, then
+            this call will execute within it's own transaction.
+            </para>
+            <para>
+            Example using ForAll to perform some action against the record set.
+            </para>
+            <code>
+            db.ForAll&lt;Customer&gt;(
+            	c =&gt; Action(c)
+            );
+            </code>
+            <para>
+            Manual way of acheiving the same results as above.
+            </para>
+            <code>
+            var results = db.GetAll&lt;Customer&gt;();
+            foreach (var r in results)
+            	Action(r);
+            </code>
+            </example>
+        </member>
+        <member name="T:HSS.Data.Storage.DatabaseQuery`1">
+            <summary>
+            Provides functionality to execute queries against a <see cref="T:HSS.Data.Storage.Database"/>.
+            </summary>
+            <typeparam name="T">The <see cref="T:System.Type"/> of object to query.</typeparam>
+            <remarks>
+            <para>
+            All Queries support the use of Transactions, either implicit or explicit and always operate under a TABLE lock.
+            </para>
+            <para>
+            You do not need to use this to find a single object by it's id (PrimaryKey). If you need to
+            locate an individual object by it's Id, use either the <see cref="M:HSS.Data.Storage.Database.Get(System.IComparable,System.Type)"/> or <see cref="M:HSS.Data.Storage.Database.Get``1(System.IComparable)"/> method.
+            </para>
+            </remarks>
+            <example>
+            <para>Find the first object where the MyInt property matches some value.</para>
+            <code>
+            
+            // LINQ Methods with an implicit transaction
+            var found = this.db.Query&lt;Person&gt;().FirstOrDefault(p =&gt; p.MyInt == SomeInt);
+            
+            // Lambda Query
+            var query = from Person p in this.db
+            			where p.MyInt == someInt
+            			select p;
+            	
+            // The internal call to GetEnumerator executes with an implicit transaction.
+            // The iterating over the results of the query, is not part of the transaction.
+            foreach (var p in query)
+            	Console.WriteLine(p.myInt);
+            
+            // -or-
+            
+            // Executes with an implicit transaction
+            var found = query.FirstOrDefault();
+            	
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseQuery`1.ToString">
+            <summary>
+            Gets a string representation of the Query.
+            </summary>
+            <returns>A string representation of the Query.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseQuery`1.GetEnumerator">
+            <summary>
+            Executes the current query.
+            </summary>
+            <returns>An enumerator over the results.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseQuery`1.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Executes the current query.
+            </summary>
+            <returns>An enumerator over the results.</returns>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseQuery`1.Expression">
+            <summary>
+            Gets the current expression.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseQuery`1.ElementType">
+            <summary>
+            Gets the contained Type.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseQuery`1.Provider">
+            <summary>
+            Gets the current provider.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.QueryProvider">
+            <summary>
+            A basic abstract LINQ query provider
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.DatabaseSchema">
+            <summary>
+            Contains the schema information for all tables (<see cref="T:HSS.Data.Storage.TableSchema"/>) currently stored within the database.
+            </summary>
+            <example>
+            <para>
+            Enumerate the table schemas (<see cref="T:HSS.Data.Storage.TableSchema"/>) contained within this database schema
+            </para>
+            <code>
+            foreach(var ts in this.db.Schema)
+            	Console.WriteLine(ts.Name + ": " + ts.FileFormat)
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseSchema.ToString">
+            <summary>
+            Gets the Name of the Database of this instance including the table count.
+            </summary>
+            <returns>The Database Name, including the table count.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseSchema.System#Collections#Generic#IEnumerable{HSS#Data#Storage#TableSchema}#GetEnumerator">
+            <summary>
+            Gets an IEnumerator over the TableSchema.
+            </summary>
+            <returns>An IEnumerator.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.DatabaseSchema.System#Collections#IEnumerable#GetEnumerator">
+            <summary>
+            Gets an IEnumerator over the TableSchema.
+            </summary>
+            <returns>An IEnumerator.</returns>
+        </member>
+        <member name="P:HSS.Data.Storage.DatabaseSchema.TableCount">
+            <summary>
+            Gets the count of tables contained in the DatabaseSchema.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.DataHeader`1">
+            <summary>
+            The class responsible for reading/writing the header for a given table.
+            </summary>
+            <typeparam name="T">The Table Type.</typeparam>
+        </member>
+        <member name="T:HSS.Data.Storage.DataReader">
+            <summary>
+            Custom BinaryReader, that supports updating the BaseStream and BaseStream Position.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.DataWriter">
+            <summary>
+            A custom BinaryWriter that supports setting the base stream length and getting the base stream (MemoryStream) buffer
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.DeadlockException">
+            <summary>
+            The exception that is thrown when a database call encounters a deadlock, and has been chosen as the deadlock victim.
+            </summary>
+            <remarks>
+            <para>
+            A deadlock can occur when two transactions lock on the same
+            records or tables, but in opposite order. If they were to 
+            perform in the same order, then they both could succeed.
+            </para>
+            </remarks>
+            <example>
+            <para>
+            Example showing a dead lock scenario. If they were performed in the
+            same order then one would receive a <see cref="T:HSS.Data.Storage.ConstraintException"/>
+            exception for trying to add a duplicate value.
+            </para>
+            <code>
+            public class Program
+            {
+            	static Database db = null;
+            	static Barrier barrier = new Barrier(2);
+            	static void Main()
+            	{
+            		try
+            		{
+            			db = new Database("MyDatabaseName", "c:\MyDataFolderPath");
+            			
+            			var t1 = Task.Factory.StartNew(() =&gt;
+            			{
+            				TransactionOne();
+            			});
+            
+            			var t2 = Task.Factory.StartNew(() =&gt;
+            			{
+            				TransactionTwo();
+            			});
+            			
+            			Task.WaitAll(t1, t2);
+            		}
+            		finally
+            		{
+            			if (null != db)
+            				db.Dispose();
+            		}
+            	}
+            	static void TransactionOne()
+            	{
+            		Transaction trx = null;
+            		try
+            		{
+            			barrier.SignalAndWait();
+            			trx = Transaction.Begin();
+            				
+            			var m1 = new MyModel() { Id = 1 };
+            			db.Add(m1);
+            				
+            			var m2 = new MyModel() { Id = 2 };
+            			db.Add(m2);
+            			
+            			trx.Commit();
+            		}
+            		catch (DeadlockException dex)
+            		{
+            		    trx.Rollback();
+            		}
+            	}
+            	static void TransactionTwo()
+            	{
+            		Transaction trx = null;
+            		try
+            		{
+            			barrier.SignalAndWait();
+            			trx = Transaction.Begin();
+            				
+            			var m2 = new MyModel() { Id = 2 };
+            			db.Add(m2);
+            				
+            			var m1 = new MyModel() { Id = 1 };
+            			db.Add(m1);
+            			
+            			trx.Commit();
+            		}
+            		catch (DeadlockException dex)
+            		{
+            		    trx.Rollback();
+            		}
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:HSS.Data.Storage.DecryptException">
+            <summary>
+            The exception that is thrown when an error occurs during a decrypt operation.
+            </summary>
+            <remarks>
+            <para>
+            This exception is typically raised if the database was previously encrypted with a different password.
+            </para>
+            </remarks>
+            <example>
+            <code>
+            public class Program
+            {
+            	private void Main()
+            	{
+            		Database db = null;
+            		try
+            		{
+            			db = new Database("n", "f", "INVALID-PASSWORD");
+            			db.Get&lt;Model&gt;(1);
+            		}
+            		catch (DecryptException dex)
+            		{
+            			MessageBox.Show(dex.Message);
+            		}
+            		finally
+            		{
+            			if (null != db)
+            				db.Dispose();
+            		}
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:HSS.Data.Storage.DoNotStoreAttribute">
+            <summary>
+            Indicates that a Property should not be stored.
+            </summary>
+            <example>
+            <code>
+            public class Program
+            {
+            	private void Main()
+            	{
+            		Database db = null;
+            		try
+            		{
+            			db = new Database("MyDatabaseName", "c:\MyDataFolderPath");
+            			var result = db.Query&lt;MyModel&gt;().Where(m =&gt; m.ThreeCharString.Length > 0);
+            			var m = db.Get&lt;MyModel&gt;(1);
+            		}
+            		catch (ConstraintException cex)
+            		{
+            			MessageBox.Show(cex.Message);
+            		}
+            	}
+            	class MyModel
+            	{
+            		[DoNotStore]
+            		public string MySuperLongString { get; set; }
+            		
+            		[DoNotStore]
+            		public byte[] MyAdHocBlob { get; set; }
+            		
+            		[CharLength(3)]
+            		[Index(false)]
+            		public string ThreeCharString { get; set; }
+            		
+            		[PrimaryKey(AutoIncrement = true)]
+            		public int Id { get; set; }
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="T:HSS.Data.Storage.ElevatedStream">
+            <summary>
+            A FileStream wrapper when running with ElevatePermissions.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.TrustedAccessStream">
+            <summary>
+            A FileStream for trusted applications.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.IFileStream">
+            <summary>
+            IFileStream
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.Encryptor">
+            <summary>
+            Encryptor
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.Encryptor.BlockSize">
+            <summary>
+            The block size used for encryption.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.Encryptor.Dispose">
+            <summary>
+            Cleanup
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.Error">
+            <summary>
+            Helper class for consolidation of database errors.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.FieldMetaType">
+            <summary>
+            Metadata for a single <c>Property</c> from a given <c>Object</c>.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.MetaType">
+            <summary>
+            Metadata for a given <c>Type</c> that can be stored in a file.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.MetaType.Type">
+            <summary>
+            Gets the Type of the Property.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.MetaType.ElementType">
+            <summary>
+            Gets the ElementType if this Meta represents a NullableT type.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.MetaType.IsGeneric">
+            <summary>
+            Gets if this Meta Type is Generic.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.MetaType.IsNullableT">
+            <summary>
+            Gets if this Meta Type is of type NullableT.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.MetaType.Name">
+            <summary>
+            Gets the name of the Property.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.MetaType.SerializedLength">
+            <summary>
+            Gets the number of bytes of the serialized value.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.MetaType.StoredLength">
+            <summary>
+            Gets the number of bytes of the stored value, accounting for encryption.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.FieldMetaType.SetPropertyValue(System.Object,System.Object)">
+            <summary>
+            Sets the property value of the provided instance.
+            </summary>
+            <param name="instance">The object instance to write to.</param>
+            <param name="value">The value to write.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.FieldMetaType.GetPropertyValue(System.Object)">
+            <summary>
+            Gets the property value of the provided instance.
+            </summary>
+            <param name="instance">The object instance to read from.</param>
+            <returns>The value read.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.FieldMetaType.SetAccessor(System.Reflection.PropertyInfo)">
+            <summary>
+            Set the property accessor for this field type.
+            </summary>
+            <param name="propertyInfo">The property info.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.FieldMetaType.DeserializeProperty(HSS.Data.Storage.DataReader)">
+            <summary>
+            Set the position of the provided reader, and then deserializes.
+            </summary>
+            <param name="reader">The DataReader containing the bytes for this field.</param>
+            <returns>The deserialized field object.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.FieldMetaType.Set``1(HSS.Data.Storage.DataReader,``0)">
+            <summary>
+            Two part process; deserializes the object, and sets the value for the provided instance.
+            Also assumes the position of the reader is in the correct location.
+            </summary>
+            <param name="reader">The DataReader containing the bytes for this field.</param>
+            <param name="instance">The instance to assign the value to.</param>
+        </member>
+        <member name="P:HSS.Data.Storage.FieldMetaType.IsOfTypeString">
+            <summary>
+            Gets if this meta type is of type String.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.FieldMetaType.IsIndexed">
+            <summary>
+            Gets if the Property should be Indexed.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.FieldMetaType.IsUnique">
+            <summary>
+            Gets if the Index is unique.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.FieldMetaType.IsPrimaryKey">
+            <summary>
+            Gets or sets of this is the primary key property.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.FieldMetaType.Position">
+            <summary>
+            Gets the fields position within a given record.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.FileEncoding">
+            <summary>
+            The available File Encoding.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.FileEncoding.Utf8">
+            <summary>
+            The default file encoding.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.GenericFactory`1.GenericActivator">
+            <summary>
+            The dynamic activator for this factory.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.GenericFactory`1.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.Guard.ArgumentNotNull(System.Object,System.String)">
+            <summary>
+            Throws <see cref="T:System.ArgumentNullException"/> if the given argument is null.
+            </summary>
+            <exception cref="T:System.ArgumentNullException"> if tested value is null.</exception>
+            <param name="argumentValue">Argument value to test.</param>
+            <param name="argumentName">Name of the argument being tested.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.Guard.ArgumentNotNullOrEmpty(System.String,System.String)">
+            <summary>
+            Throws an exception if the tested string argument is null or an empty string.
+            </summary>
+            <exception cref="T:System.ArgumentNullException">Thrown if string value is null.</exception>
+            <exception cref="T:System.ArgumentException">Thrown if the string is empty</exception>
+            <param name="argumentValue">Argument value to check.</param>
+            <param name="argumentName">Name of argument being checked.</param>
+        </member>
+        <member name="T:HSS.Data.Storage.Header">
+            <summary>
+            Header
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.FilePathFolder">
+            <summary>
+            Gets the folder path of the table's data file.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.FilePathName">
+            <summary>
+            Gets the file name of the table's data file.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.FilePath">
+            <summary>
+            Gets or sets the absolute file path.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.RecoveryFile">
+            <summary>
+            The file path of a log file that needs to be recovered.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.PrimaryKey">
+            <summary>
+            Gets or sets the Primary Key.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.PrimaryKeyAutoIncrement">
+            <summary>
+            Gets or sets if the primary key should auto increment.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.PrimaryKeyLastId">
+            <summary>
+            Gets or sets the primary key last id.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.RecordCount">
+            <summary>
+            Gets or sets the RecordCount value.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.FileFormat">
+            <summary>
+            Gets or sets the file format.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.Properties">
+            <summary>
+            Gets or sets the list of Properties.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.PropertiesCount">
+            <summary>
+            Gets the count of properties.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Header.Offset">
+            <summary>
+            Gets or sets the offset where the contained data begins (after any preamble or headers).
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.IndexAttribute">
+            <summary>
+            Indicates that a user defined index should be generated for the given property and if it should
+            be a unique constraint.
+            </summary>
+            <remarks>
+            <para>
+            The Id property (see <see cref="T:HSS.Data.Storage.PrimaryKeyAttribute"/>) of a given object is automatically indexed
+            with a unique constraint and therefore does not require this attribute.
+            </para>
+            <para>
+            Indexes are stored in-memory and should be used sparingly, as the HSS Database is already extremely
+            fast at reading and filtering data. One place where they should be used is on properties that are a
+            foreign key to another table.
+            </para>
+            <para>
+            Another example of a property that would be a good candidate for indexing would be a property in a
+            frequently used LINQ orderby or predicate query.
+            </para>
+            <para>
+            If you know the primary key (id) of the record you want, it’s preferred that you look up a single
+            record using the <c>Get</c> method, as primary keys are already indexed and results in a near O(1) 
+            execution time.
+            </para>
+            </remarks>
+            <example>
+            <code>
+            public class Program
+            {
+            	private void Main()
+            	{
+            		Database db = null;
+            		try
+            		{
+            			db = new Database("MyDatabaseName", "c:\MyDataFolderPath");
+            			var result = db.Query&lt;MyModel&gt;().OrderBy(m =&gt; m.ThreeCharString).FirstOrDefault();
+            			var m = db.Get&lt;MyModel&gt;(1);
+            		}
+            		catch (ConstraintException cex)
+            		{
+            			MessageBox.Show(cex.Message);
+            		}
+            	}
+            	class MyModel
+            	{
+            		[CharLength(3)]
+            		[Index(false)]
+            		public string ThreeCharString { get; set; }
+            		
+            		[StringLength(100)]
+            		public string MyLongString { get; set; }
+            		
+            		[PrimaryKey(AutoIncrement = true)]
+            		public int Id { get; set; }
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.IndexAttribute.#ctor(System.Boolean)">
+            <summary>
+            Constructs a new index attribute for a given property.
+            </summary>
+            <param name="isUnique">true if this is a Unique Index; otherwise false.</param>
+        </member>
+        <member name="P:HSS.Data.Storage.IndexAttribute.IsUnique">
+            <summary>
+            Gets if this is a unique index.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.IndexCollection.Clear">
+            <summary>
+            Clear all indexes, and removes them from the collection.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.IndexCollection.Reset">
+            <summary>
+            Clear all indexes, and DOES NOT remove them from the collection.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.IndexCollection.TryGetIndex(System.String,HSS.Data.Storage.ITableIndex@)">
+            <summary>
+            Try and get a specific index.
+            </summary>
+            <param name="key">The name of the index.</param>
+            <param name="index">The found index; otherwise null.</param>
+            <returns>True if the index was found; otherwise false.</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.IndexCollection.Exists(System.String)">
+            <summary>
+            Check if an index exists by the provided name.
+            </summary>
+            <param name="name">The name to check.</param>
+            <returns>true if the index exists; otherwise false.</returns>
+        </member>
+        <member name="P:HSS.Data.Storage.IndexCollection.Item(System.String)">
+            <summary>
+            Gets the index associated with the specified key.
+            </summary>
+            <param name="key"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HSS.Data.Storage.IPropertyAccessor">
+            <summary>
+            Interface that defines the accessors for a Property Accessor Cache.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.LicenseException">
+            <summary>
+            Exception that is thrown when an invalid license is encountered.
+            </summary>
+            <example>
+            <code>
+            public class Program
+            {
+            	private void Main()
+            	{
+            		Database.DeveloperEmail = "Incorrect Email Address";
+            		Database.LicenseKey = "Incorrect License Key -or- Expired Trial License Key";
+            		
+            		Database db = null;
+            		try
+            		{
+            			db = new Database("MyDatabaseName", "c:\MyDataFolderPath");
+            		}
+            		catch (LicenseException lex)
+            		{
+            			MessageBox.Show(lex.Message);
+            		}
+            	}
+            }
+            </code>
+            </example>
+        </member>
+        <member name="M:HSS.Data.Storage.LicenseException.#ctor(System.String)">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="message">The license exception message.</param>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.PartialEvaluator">
+            <summary>
+            Rewrites an expression tree so that locally isolatable sub-expressions are evaluated and converted into ConstantExpression nodes.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.PartialEvaluator.Nominator">
+            <summary>
+            Performs bottom-up analysis to determine which nodes can possibly
+            be part of an evaluated sub-tree.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.Projections">
+            <summary>
+            Contains any column projections.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.Linq.Projections.#ctor">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.QueryExecuteGroupBy`2">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <typeparam name="TKey"></typeparam>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.QueryExecuteModifier`2">
+            <summary>
+            Executes a multiple projections query.
+            </summary>
+            <typeparam name="T">The Type of the record stored in the table.</typeparam>
+            <typeparam name="TNew">The Type of the projection (expected Anonymous'N).</typeparam>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.QueryExecuteProjection`2">
+            <summary>
+            Executes a single projection query.
+            </summary>
+            <typeparam name="T">The Type of the record stored in the table.</typeparam>
+            <typeparam name="TColumn">The Type of the column to return.</typeparam>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.QueryExecuteProjections`2">
+            <summary>
+            Executes a multiple projections query.
+            </summary>
+            <typeparam name="T">The Type of the record stored in the table.</typeparam>
+            <typeparam name="TNew">The Type of the projection (expected Anonymous'N).</typeparam>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.QueryParser">
+            <summary>
+            Parses an HSS DB Query.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.Linq.TypeHelper">
+            <summary>
+            Type related helper methods
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.LockManager">
+            <summary>
+            A DeadLock detectable Lock Manager.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.LockManager.INITIAL_TIMEOUT">
+            <summary>
+            500 ms - The minimum time to wait to acquire the lock after which deadlock detection will run before trying with the MAXMUM_TIMEOUT.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.LockManager.MAXIMUM_TIMEOUT">
+            <summary>
+            60 sec - The maximum time to wait to acquire the lock.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.MethodInvoker">
+            <summary>
+            MethodInvoker
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.MethodInvoker.#ctor(System.Reflection.MethodInfo)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="methodInfo">The method info.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.MethodInvoker.CreateInvokeDelegate(System.Reflection.MethodInfo)">
+            <summary>
+            Build the delegate.
+            </summary>
+            <param name="methodInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.MethodInvoker.Invoke``1(``0,System.Object[])">
+            <summary>
+            Invoke the method.
+            </summary>
+            <param name="instance"></param>
+            <param name="parameters"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HSS.Data.Storage.TableIndex`1">
+            <summary>
+            A base class representing a Table Index.
+            </summary>
+            <typeparam name="K">The Type of key value stored in the index.</typeparam>
+        </member>
+        <member name="M:HSS.Data.Storage.TableIndex`1.Initialize(HSS.Data.Storage.FieldMetaType)">
+            <summary>
+            
+            </summary>
+            <param name="metaType"></param>
+        </member>
+        <member name="M:HSS.Data.Storage.TableIndex`1.TryGetValue(System.Int32,System.Object@)">
+            <summary>
+            
+            </summary>
+            <param name="row"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableIndex`1.AllRowsPreOrderedWithCheck``1(System.Collections.Generic.IEnumerable{System.Int32},System.Collections.Generic.IDictionary{System.Int32,``0},HSS.Data.Storage.Linq.QueryPlan)">
+            <summary>
+            
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="deletes"></param>
+            <param name="adds"></param>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableIndex`1.AllRowsPreOrderedNoCheck(HSS.Data.Storage.Linq.QueryPlan)">
+            <summary>
+            
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableIndex`1.AllKeyValuesOrdered``1(HSS.Data.Storage.Linq.QueryPlan)">
+            <summary>
+            Select all values
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="P:HSS.Data.Storage.TableIndex`1.IsPrimaryKeyIndex">
+            <summary>
+            Gets of this index is the primary key index.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableIndex`1.IsOfTypeIntOrLong">
+            <summary>
+            Gets if the Stored Type is of Type Int32 or Int64
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableIndex`1.IsUnique">
+            <summary>
+            Is this index unique.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableIndex`1.Name">
+            <summary>
+            Gets the column name this is index is based on.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableIndex`1.KeyType">
+            <summary>
+            Gets the column type this is index is based on.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableIndex`1.LastRow">
+            <summary>
+            Gets the last row of the index.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableIndex`1.Count">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.NonUniqueIndex`1.IsUnique">
+            <summary>
+            This is a NON-Unique Index.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.PrimaryKey">
+            <summary>
+            A reference to a Primary Key value.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.PrimaryKeyAttribute">
+             <summary>
+             Marks a property for a given object as the explicit primary key. Only one property per class is supported.
+             </summary>
+             <remarks>
+             <para>
+             Composite primary keys are not supported. Properties of type Int32, Int64 and Guid are the only supported
+             types that can be used as primary keys.
+             </para>
+             <para>
+             A property not marked with this attribute but has a name of "id" or "class name + id" (case-insensitive)
+             will be inferrred as an implicit primary key if an explicit primary key is not already defined in your model.
+             </para>
+             <para>
+             Implicit primary keys do not support auto-incrementing and therefore require you to explicity provide the
+             primary key value when adding a new record.
+             </para>
+             <para>
+             The property that is the primary key, will automatically be indexed with a unique constraint and therefore does
+             not require an <see cref="T:HSS.Data.Storage.IndexAttribute"/> attribute.
+             </para>
+             <para>
+             If you know the primary key (id) of the record you want, the preferred way to look up a single
+             record is to use the <c>Get</c> method, as this results in a near O(1) execution time.
+             </para>
+             </remarks>
+             <example>
+             <code>
+             public class Program
+             {
+            		private void Main()
+            		{
+            			Database db = null;
+            			try
+            			{
+            				db = new Database("MyDatabaseName", "c:\MyDataFolderPath");
+            				var m = db.Get&lt;MyModel&gt;(1);
+            			}
+            			catch (ConstraintException cex)
+            			{
+            				MessageBox.Show(cex.Message);
+            			}
+            		}
+            		class MyModel
+            		{
+            			[PrimaryKey(AutoIncrement = true)]
+            			public int Id { get; set; }
+            		}
+            		
+            		class MyModel2
+            		{
+            			// Id is inferred to be the primary key, and is assumed NOT auto-increment.
+            			public int Id { get; set; }
+            		}
+            
+            		class MyModel3
+            		{
+            			// MyModel3Id is inferred to be the primary key, and is assumed NOT auto-increment.
+            			public int MyModel3Id { get; set; }
+            		}
+            	}
+            	</code>
+             </example>
+        </member>
+        <member name="M:HSS.Data.Storage.PrimaryKeyAttribute.#ctor">
+            <summary>
+            Constructs a new attribute defining the Primary Key property for a class.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.PrimaryKeyAttribute.AutoIncrement">
+            <summary>
+            Gets or sets if the primary key should auto increment.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.PrimaryKeyIndex">
+            <summary>
+            Special UniqueIndex for primary keys
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.PrimaryKeyIndex.Int32Name">
+            <summary>
+            INT32
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.PrimaryKeyIndex.Int64Name">
+            <summary>
+            INT64
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.PrimaryKeyIndex.GuidName">
+            <summary>
+            GUID
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.PrimaryKeyMap">
+            <summary>
+            Custom hash table (map) for primary keys.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.PropertyAccessor">
+            <summary>
+            PropertyAccessor
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.PropertyAccessor.#ctor(System.Reflection.PropertyInfo)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="propertyInfo"></param>
+        </member>
+        <member name="M:HSS.Data.Storage.PropertyAccessor.GetValue(System.Object)">
+            <summary>
+            Gets the current property value.
+            </summary>
+            <param name="o"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.PropertyAccessor.SetValue``1(``0,System.Object)">
+            <summary>
+            Sets the current property value.
+            </summary>
+            <param name="o"></param>
+            <param name="value"></param>
+        </member>
+        <member name="P:HSS.Data.Storage.PropertyAccessor.PropertyType">
+            <summary>
+            Gets the Property's Type.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.SerializedType">
+            <summary>
+            Enum which is used for fast serialization. It stores information about a type or type/value.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.Table`1">
+            <summary>
+            A file for reading/writing stored objects.
+            </summary>
+            <typeparam name="T">An object (table data) to be stored.</typeparam>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.#ctor(HSS.Data.Storage.Header)">
+            <summary>
+            
+            </summary>
+            <param name="header"></param>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.GetSchema(HSS.Data.Storage.DatabaseContext,System.Text.Encoding)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.Open(HSS.Data.Storage.DatabaseContext,System.Text.Encoding)">
+            <summary>
+            Open the from the provided database context, header and encoding.
+            </summary>
+            <param name="databaseContext">The current database context.</param>
+            <param name="encoding">The database file encoding.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.Close">
+            <summary>
+            Close the table (does not dispose the table).
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.Backup(System.String)">
+            <summary>
+            Perform a backup.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.Restore(System.String)">
+            <summary>
+            Perform a restore.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.HSS#Data#Storage#ITableQueryable{T}#PrepareQuery(HSS.Data.Storage.Linq.QueryPlan,System.String)">
+            <summary>
+            Determines if the query can be resolved entirely from the indexes.
+            If the query type is any of the following:  Where, Skip, Take, OrderBy, OrderByDescending or GroupBy, then the query can NOT be processed from just the indexes.
+            If there's no where clause, pre-order or select, then the query can be processed from just the indexes.
+            If there is a where clause or a pre-order, then all predicates/columns must not contain a record comparison and all must be indexed.
+            </summary>
+            <param name="query"></param>
+            <param name="projectColumnName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.Add(`0)">
+            <summary>
+            
+            </summary>
+            <param name="instance"></param>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.AddRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            
+            </summary>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.Set(`0)">
+            <summary>
+            Upserts the value.
+            </summary>
+            <param name="instance"></param>
+        </member>
+        <member name="M:HSS.Data.Storage.Table`1.SetRange(System.Collections.Generic.IEnumerable{`0})">
+            <summary>
+            
+            </summary>
+            <param name="range"></param>
+            <returns></returns>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.Name">
+            <summary>
+            Gets the name of the Type for this table.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.FullName">
+            <summary>
+            The full name of the type stored in this table.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.AssemblyQualifiedName">
+            <summary>
+            The AssemblyQualifiedName of the type stored in this table.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.FileFormat">
+            <summary>
+            Gets the table's file format.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.DataFilePath">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.DataFileFolder">
+            <summary>
+            The folder of the data file.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.DataFileName">
+            <summary>
+            The name of the data file.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.DataFileSize">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.LastWriteTime">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.IsOpen">
+            <summary>
+            Gets if this file is currently open.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.PrimaryKeyType">
+            <summary>
+            Gets the CLR Type of the Primary Key.
+            </summary>
+            <returns>The CLR Type.</returns>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.PrimaryKeyName">
+            <summary>
+            Get the column/field name of the Primary Key.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Table`1.IsElevated">
+            <summary>
+            Are we running elevated
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.TableContext`1">
+            <summary>
+            Maintains the context of an open table.
+            </summary>
+            <typeparam name="T">The table type.</typeparam>
+        </member>
+        <member name="F:HSS.Data.Storage.TableContext`1.COMPLETION_LOCK_TIMEOUT">
+            <summary>
+            The time to wait to acquire the Completion LOCK for a Table (10 seconds).
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TableContext`1.WRITER_LOCK_WAIT_TIMEOUT">
+            <summary>
+            The time to wait to acquire a WriterLock against the table (30 seconds)
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TableContext`1.READER_LOCK_WAIT_TIMEOUT">
+            <summary>
+            The time to wait to acquire a ReaderLock against the table (60 seconds)
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TableContext`1.GET_READER_TIMEOUT">
+            <summary>
+            The time to wait to acquire the Reader instance (60 seconds)
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.#ctor(HSS.Data.Storage.DatabaseContext,HSS.Data.Storage.Header,System.Text.Encoding)">
+            <summary>
+            Constructor
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.ExitThread">
+            <summary>
+            Exit all locks and clears any transaction cache
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.TryEnterKeyLock(HSS.Data.Storage.PrimaryKey)">
+            <summary>
+            Lock held for the life of the transaction.
+            </summary>
+            <exception cref="T:System.Threading.SynchronizationLockException">Failed to Enter PrimaryKey Lock</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.TryEnterTableLock">
+            <summary>
+            Lock held for the life of the transaction.
+            </summary>
+            <exception cref="T:System.Threading.SynchronizationLockException">Failed to Enter State Lock</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.TryEnterCompleteLock">
+            <summary>
+            Lock held for the life of the transaction.
+            </summary>
+            <exception cref="T:System.Threading.SynchronizationLockException">Failed to the Lock</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.ExitCurrentLocks">
+            <summary>
+            Exit any locks for the current thread.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.CloseLocks">
+            <summary>
+            Exits all locks, and then disposes our lock context
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.EnterReaderLock">
+            <summary>
+            Entere a File Read Lock, for the life of the Disposable Object.
+            </summary>
+            <returns>DisposedActionCaller</returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.EnterUpgradeLock(System.Int32)">
+            <summary>
+            Entere a File Upgradeable Read Lock, for the life of the Disposable Object.
+            </summary>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableContext`1.EnterWriterLock(System.Int32)">
+            <summary>
+            Entere a File Write Lock, for the life of the Disposable Object.
+            </summary>
+            <param name="timeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableFilter`1.FromRandomCursor``1(HSS.Data.Storage.Linq.QueryPlan,System.Func{``0},System.Boolean)">
+            <summary>
+            Here we filter to rows first which could use just indexes or actually read from the file.
+            Then, from the resulting rows we activate each row, potentially will read from the file again.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="query"></param>
+            <param name="activator"></param>
+            <param name="includeNulls"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableFilter`1.ToRowsFromSequentialCursor(HSS.Data.Storage.Linq.QueryPlan,System.Boolean)">
+            <summary>
+            Here, we try to query from just the indexes, if there is no Where Clause.
+            If there is a where clause, then we must proceed as normal with the FromSequentialCursor.
+            </summary>
+            <param name="query"></param>
+            <param name="includeNulls"></param>
+            <returns></returns>
+            <remarks>
+            <para>
+            The result set includes processing of the WriteCache, Ordering, Skip and Take.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.TableFilter`1.TrySelectAllRowsFromASingleIndex(HSS.Data.Storage.Linq.QueryPlan)">
+            <summary>
+            If the query is not pre-ordered, then we just select all rows the PrimaryKeyIndex including any trx cache items.
+            If the query is pre-ordered by just a single column, then we try to query a corresponding index if any, including any trx cache items.
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableFilter`1.FromSequentialCursor``1(HSS.Data.Storage.Linq.QueryPlan,System.Func{``0},System.Boolean)">
+            <summary>
+            Normal Case
+            This walks the file or indexes, applying the filter with deferred enumeration, calling the provided activator for each row that
+            is to be included in the results set. And is wrapped with a call to ApplyPreOrder (order/skip/take) against the result set.
+            </summary>
+            <typeparam name="TResult"></typeparam>
+            <param name="query"></param>
+            <param name="activator"></param>
+            <param name="includeNulls"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HSS.Data.Storage.TableFilter`1.FromWhereCursor(HSS.Data.Storage.Linq.QueryPlan,System.Func{System.Int32,HSS.Data.Storage.YieldResult},System.Boolean)">
+            <summary>
+            Set cursor (essentially the from-where clause)
+            Enumerates the file or indexes, allowing the caller to control the yield point in the deferred execution.
+            </summary>
+            <param name="query"></param>
+            <param name="yieldRow"></param>
+            <param name="yieldOnSuccess"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HSS.Data.Storage.TableReader`1">
+            <summary>
+            Reads data from the table file.
+            </summary>
+            <typeparam name="T">The Type of data being read.</typeparam>
+        </member>
+        <member name="M:HSS.Data.Storage.TableReader`1.UseRowActivation(HSS.Data.Storage.Linq.QueryPlan,System.Double)">
+            <summary>
+            Can we filter to rows without object/record activation/instantiation.
+            </summary>
+            <param name="query">The query to be executed.</param>
+            <param name="recordCount">The current total records expecting to be queried.</param>
+            <returns>True if we can just filter to rows; otherwise we have to activate inline.</returns>
+            <remarks>
+            <para>
+            We only want to activate records that are part of the final result set
+            so we try not to activate any instances during the filtering process.
+            </para>
+            <para>
+            Once the filtering is complete, then we go thru and activate the
+            final result set of records. This does require us to typically access
+            the file twice. Once for filtering, and once for activating.
+            </para>
+            <para>
+            After testing we have determined that this is the fastest solution. Reason
+            being, is that the filtering is performed sequentially against the file
+            which is super fast. And then the second pass for activation is done
+            with random access to get just the rows of data we need saving the over
+            head of object activation and memory management.
+            </para>
+            <para>
+            The exception is if we have to compare an individual activated record
+            as part of the query's filter expression (where clause). Then we just
+            activate each record as we filter each row. The exception to this
+            exception, is if the query contains a skip/take and results in less
+            than ~20% of the expected total records being returned or there are
+            less than 20K total records. In this case we still use row activation
+            as it's still faster to access the file twice versus having to activate
+            a large number of records only to not return them due to the skip/take.
+            </para>
+            </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.TableReader`1.SelectStar(HSS.Data.Storage.Linq.QueryPlan)">
+            <summary>
+            case QueryType.Where:
+            case QueryType.Skip:
+            case QueryType.Take:
+            case QueryType.OrderBy:
+            case QueryType.OrderByDescending:
+            </summary>
+            <param name="query"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HSS.Data.Storage.TableRepository">
+            <summary>
+            Repository of tables.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.TableRepository.#ctor(HSS.Data.Storage.DatabaseContext)">
+            <summary>
+            Constructor
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="T:HSS.Data.Storage.DataDef">
+            <summary>
+            Data file definition.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.DataDef.FILE_FORMAT">
+            <summary>
+            The File Format Version
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.DataDef.DefaultMaxBuffer">
+            <summary>
+            64 KB Max File Buffer - Optimal read/write performance
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.DataDef.LargeBatch">
+            <summary>
+            4 Times the DefaultMaxBuffer
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.DataDef.NullChar">
+            <summary>
+            char[1] - Empty
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.LogDef">
+            <summary>
+            Log file definition.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.LogDef.DefaultMaxBuffer">
+            <summary>
+            64 KB Max File Buffer - Optimal read/write performance
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.TableSchema">
+            <summary>
+            Contain name of the Table and it's collection of Columns.
+            </summary>
+            <example>
+            <para>
+            Enumerate the table schemas contained within a database schema
+            </para>
+            <code>
+            foreach(var ts in this.db.Schema)
+            	Console.WriteLine(ts.Name + ": " + ts.FileFormat)
+            </code>
+            </example>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.Name">
+            <summary>
+            Gets the name of the table.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.TypeFullName">
+            <summary>
+            Gets the FullName of the Type of this table for this schema.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.AssemblyQualifiedName">
+            <summary>
+            Gets the AssemblyQualifiedName of the Type of this table for this schema.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.FileFormat">
+            <summary>
+            Gets the file format for this table.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.IsSchemaChanged">
+            <summary>
+            Gets if the schema for the Type is different than the file.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.IsIndexingChanged">
+            <summary>
+            Gets if the indexes for the Type are different than the file.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.LastPrimaryKeyId">
+            <summary>
+            Gets the last primary key value for this table.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.Columns">
+            <summary>
+            Get the list of property names (<see cref="T:HSS.Data.Storage.TableColumn"/>) associated with this schema.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableSchema.EvaluationError">
+            <summary>
+            Gets the exception encountered determining the schema.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.TableColumn">
+            <summary>
+            Describes a table's column
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.TableColumn.ToString">
+            <summary>
+            Gets a string describing the schema.
+            </summary>
+            <returns>A string describing the schema.</returns>
+        </member>
+        <member name="P:HSS.Data.Storage.TableColumn.Name">
+            <summary>
+            Gets the name of the column.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableColumn.IsKey">
+            <summary>
+            Gets if the column is the primary key.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableColumn.IsAutoIncrement">
+            <summary>
+            Gets if the column's primary key is AutoIncrement.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableColumn.IsIndex">
+            <summary>
+            Gets if the column is indexed.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableColumn.IsUnique">
+            <summary>
+            Gets if the column has a unique constraint.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableColumn.IsNullable">
+            <summary>
+            Gets if the column is nullable.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableColumn.Length">
+            <summary>
+            Gets the size of the column.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TableColumn.StoredType">
+            <summary>
+            Gets the type of data stored for this column.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.TableWriter`1">
+            <summary>
+            Handles writing/deleting to/from the table file.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:HSS.Data.Storage.TransactionThread">
+            <summary>
+            Cross-platform replacement for tracking the current thread id (Thread.CurrentThread.ManagedThreadId).
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.TransactionThread.Current">
+            <summary>
+            Gets the current managed thread id.
+            </summary>
+            
+        </member>
+        <member name="T:HSS.Data.Storage.Transaction">
+             <summary>
+             A Transaction provides boundaries to one or more operations.
+             </summary>
+             <remarks>
+             <para>
+             All opertions (direct method calls and queries) operate under a transaction.
+             If you do not wrap your calls inside of a transaction then they will operate
+             under an implicit transaction. This is important when working with single
+             operations (such as Add or Remove etc). If you execute these methods
+             sequentially in a loop, without providing your own transaction then each
+             call will begin and commit a transaction. The overhead of this will greatly
+             reduce your performance.
+             </para>
+             <example>
+             <para>
+             Example showing full usage of a user scoped transaction.
+             </para>
+             <code>
+             Transaction trx = null;
+             try
+             {
+            		try
+            		{
+            			// Should be the first call within the scope
+            			trx = Transaction.Begin();
+            
+            			//
+            			// Your scoped operations
+            			//
+             
+            			// Should be the last call within the scope
+            			trx.Commit();
+            			// Optionally without logging
+            			//trx.Commit(false);
+            			}
+            		catch (TransactionException)
+            		{
+            			//
+            			// Always call Rollback, even when committing without logging.
+            			//
+            
+            			// Try and Rollback
+            			if (null != trx)
+            				trx.Rollback();
+            		}
+            		catch (InvalidOperationException)
+            		{
+             		// Cannot create a nested transaction on the current thread
+             		// Cross-thread commit not supported
+             		// Transaction already rolledback/aborted
+             		// Transaction already completed
+             	}
+             }
+             catch (TransactionAbortedException)
+             {
+            		// Unable to rollback the transaction
+            		if (null != trx)
+             	{
+             		// The status of the transaction is unknown, and the data should be considered suspect.
+             		if (trx.Status == TransactionStatus.InDoubt)
+             		{
+             			// Restore from latest backup!
+             			//
+             			// Should be done somewhere globally
+             			// so you don't try to open again 
+             			// while performing other work
+             			//
+             			
+             			// Close the current connection
+             			mydb.Dispose();
+             			
+             			// Optionally closing the connection pool if used
+             			DatabaseConnectionPool.Shared.Reset();
+            
+             			// Perform the restore process
+             			Database.RestoreTable("your connection string", "table backup file 1");
+             			Database.RestoreTable("your connection string", "table backup file N");
+             		}
+             	}
+             }
+             catch (InvalidOperationException)
+             {
+             	// Cross-thread rollback not supported
+             	// Transaction already rolled back
+            		// Transaction already completed
+             }
+             </code>
+             </example>
+             </remarks>
+        </member>
+        <member name="M:HSS.Data.Storage.Transaction.Begin">
+            <summary>
+            Creates and returns a new transaction.
+            </summary>
+            <returns>The new Transaction.</returns>
+            <remarks>
+            <para>
+            You can only have one transaction per thread and all database calls made from within a transaction, must be made from the originating thread.
+            </para>
+            </remarks>
+            <exception cref="T:System.InvalidOperationException">Cannot create a nested transaction on the current thread; you must either commit or rollback the current transaction.</exception>	
+        </member>
+        <member name="M:HSS.Data.Storage.Transaction.Commit">
+            <summary>
+            Commit this transaction.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Commit called from a thread that does not own this transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">Cannot commit an already aborted transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">The transaction has already been completed.</exception>
+            <exception cref="T:HSS.Data.Storage.TransactionException">The transaction aborts due to an unexpected exception</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Transaction.Commit(System.Boolean)">
+            <summary>
+            Commit this transaction, optionally with or without logging.
+            </summary>
+            <param name="withLog">True, to log any updates or deletes for recovery; otherwise false to not write a recovery log.</param>
+            <exception cref="T:System.InvalidOperationException">Commit called from a thread that does not own this transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">Cannot commit an already aborted transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">The transaction has already been completed.</exception>
+            <exception cref="T:HSS.Data.Storage.TransactionException">The transaction aborts due to an unexpected exception</exception>
+        </member>
+        <member name="M:HSS.Data.Storage.Transaction.Rollback">
+            <summary>
+            Rolls back (aborts) the transaction.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">Rollback called from a thread that does not own this transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">Cannot rollback an aborted transaction.</exception>
+            <exception cref="T:System.InvalidOperationException">The transaction has already been completed.</exception>
+            <exception cref="T:HSS.Data.Storage.TransactionAbortedException">Contains any errors encountered while trying to rollback the transaction.</exception>
+        </member>
+        <member name="P:HSS.Data.Storage.Transaction.Status">
+            <summary>
+            Gets the current status of this transaction.
+            </summary>
+        </member>
+        <member name="P:HSS.Data.Storage.Transaction.Current">
+            <summary>
+            Attempt to retrieve the current transaction if one exists.
+            </summary>
+            <remarks>
+            There can be at most one <see cref="T:HSS.Data.Storage.Transaction"/>
+            per-thread.
+            </remarks>
+        </member>
+        <member name="T:HSS.Data.Storage.TransactionAbortedException">
+            <summary>
+            The exception that is thrown when a transaction failed to roll back.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.TransactionException">
+            <summary>
+            The exception that is thrown when you attempt to do work on a transaction that cannot accept new work or an
+            unknown exception was encountered usually indicating the transaction should be rolled back.
+            </summary>
+        </member>
+        <member name="M:HSS.Data.Storage.TransactionException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the TransactionException class with the specified message.
+            </summary>
+            <param name="message">A String that contains a message that explains why the exception occurred.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.TransactionException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the TransactionException class with the specified message.
+            </summary>
+            <param name="message">A String that contains a message that explains why the exception occurred.</param>
+            <param name="innerException">The exception that is the cause of the current exception, or a null reference (Nothing in Visual Basic) if no inner exception is specified.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.TransactionException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            protected serializable constructor
+            </summary>
+            <param name="info">SerializationInfo</param>
+            <param name="context">StreamingContext</param>
+        </member>
+        <member name="M:HSS.Data.Storage.TransactionAbortedException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the TransactionAbortedException class with the specified message.
+            </summary>
+            <param name="message">A String that contains a message that explains why the exception occurred.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.TransactionAbortedException.#ctor(System.Collections.Generic.IList{System.Exception})">
+            <summary>
+            Initializes a new instance of the TransactionAbortedException class with references to the inner exceptions that are the cause of this exception.
+            </summary>
+            <param name="innerExceptions">The exceptions that are the cause of the current exception.</param>
+        </member>
+        <member name="M:HSS.Data.Storage.TransactionAbortedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            protected serializable constructor
+            </summary>
+            <param name="info">SerializationInfo</param>
+            <param name="context">StreamingContext</param>
+        </member>
+        <member name="M:HSS.Data.Storage.TransactionAbortedException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the TransactionAbortedException class with serialized data.
+            </summary>
+            <param name="info">The object that holds the serialized object data.</param>
+            <param name="context">The contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The info argument is null.</exception>
+        </member>
+        <member name="P:HSS.Data.Storage.TransactionAbortedException.InnerExceptions">
+            <summary>
+            Gets a read-only collection of the Exception instances that caused the current exception.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TransactionContext.CurrentTransaction">
+            <summary>
+            The current thread specific transaction.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.TransactionStatus">
+            <summary>
+            Describes the current status of a transaction.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TransactionStatus.NotStarted">
+            <summary>
+            The transaction has not yet begun.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TransactionStatus.Active">
+            <summary>
+            The status of the transaction is unknown, because some participants are still active.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TransactionStatus.Committed">
+            <summary>
+            The transaction has been commited.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TransactionStatus.Aborted">
+            <summary>
+            The transaction has been rolled back.
+            </summary>
+        </member>
+        <member name="F:HSS.Data.Storage.TransactionStatus.InDoubt">
+            <summary>
+            The status of the transaction is unknown, and the data should be considered suspect.
+            </summary>
+        </member>
+        <member name="T:HSS.Data.Storage.UniqueIndex`1">
+            <summary>
+            
+            </summary>
+            <typeparam name="K"></typeparam>
+        </member>
+        <member name="P:HSS.Data.Storage.UniqueIndex`1.IsUnique">
+            <summary>
+            This is a Unique Index.
+            </summary>
+        </member>
+    </members>
+</doc>

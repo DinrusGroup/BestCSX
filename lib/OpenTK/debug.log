@@ -1,0 +1,16 @@
+Exception occured in example Examples.Tutorial.Anaglyph: System.Reflection.TargetInvocationException: Адресат вызова создал исключение. ---> OpenTK.Graphics.GraphicsContextException: Could not create GL context: оЂЂзїЅо…Ё1нЏЉзќ™о†Њ1о†°1о†ґ1о…¤1бќЊ
+   в OpenTK.Platform.SDL2.Sdl2GraphicsContext..ctor(GraphicsMode mode, IWindowInfo win, IGraphicsContext shareContext, Int32 major, Int32 minor, GraphicsContextFlags flags)
+   в OpenTK.Platform.SDL2.Sdl2Factory.CreateGLContext(GraphicsMode mode, IWindowInfo window, IGraphicsContext shareContext, Boolean directRendering, Int32 major, Int32 minor, GraphicsContextFlags flags)
+   в OpenTK.Graphics.GraphicsContext..ctor(GraphicsMode mode, IWindowInfo window, Int32 major, Int32 minor, GraphicsContextFlags flags)
+   в OpenTK.GameWindow..ctor(Int32 width, Int32 height, GraphicsMode mode, String title, GameWindowFlags options, DisplayDevice device, Int32 major, Int32 minor, GraphicsContextFlags flags, IGraphicsContext sharedContext)
+   в OpenTK.GameWindow..ctor(Int32 width, Int32 height, GraphicsMode mode, String title, GameWindowFlags options, DisplayDevice device, Int32 major, Int32 minor, GraphicsContextFlags flags)
+   в Examples.Tutorial.Anaglyph..ctor()
+   в Examples.Tutorial.Anaglyph.Main()
+   --- Конец трассировки внутреннего стека исключений ---
+   в System.RuntimeMethodHandle._InvokeMethodFast(Object target, Object[] arguments, SignatureStruct& sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   в System.RuntimeMethodHandle.InvokeMethodFast(Object target, Object[] arguments, Signature sig, MethodAttributes methodAttributes, RuntimeTypeHandle typeOwner)
+   в System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture, Boolean skipVisibilityChecks)
+   в System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   в System.RuntimeType.InvokeMember(String name, BindingFlags bindingFlags, Binder binder, Object target, Object[] providedArgs, ParameterModifier[] modifiers, CultureInfo culture, String[] namedParams)
+   в System.Type.InvokeMember(String name, BindingFlags invokeAttr, Binder binder, Object target, Object[] args)
+   в Examples.Program.LaunchExample(String type)

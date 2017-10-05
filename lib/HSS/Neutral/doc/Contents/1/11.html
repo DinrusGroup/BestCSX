@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This comment will force IE7 to go into quirks mode. -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" type="text/css" href="../../CSS/Contents.css"></link>
+<script type="text/javascript" src="../../JS/Common.js"></script>
+<title>CharLengthAttribute Class</title>
+</head>
+<body>
+<div id="Header">
+<div id="ProjectTitle">Documentation Project</div>
+<div id="PageTitle">CharLengthAttribute Class</div>
+<div id="HeaderShortcuts">
+<a href="#SectionHeader0" onclick="javascript: SetSectionVisibility(0, true); SetExpandCollapseAllToCollapseAll();">Syntax</a>&nbsp;
+<a href="#SectionHeader1" onclick="javascript: SetSectionVisibility(1, true); SetExpandCollapseAllToCollapseAll();">Remarks</a>&nbsp;
+<a href="#SectionHeader2" onclick="javascript: SetSectionVisibility(2, true); SetExpandCollapseAllToCollapseAll();">Members</a>&nbsp;
+<a href="#SectionHeader3" onclick="javascript: SetSectionVisibility(3, true); SetExpandCollapseAllToCollapseAll();">Example</a>&nbsp;
+</div>
+<div class="DarkLine"></div>
+<div class="LightLine"></div>
+<div id="HeaderToolbar">
+<img id="ExpandCollapseAllImg" src="../../GFX/SmallSquareExpanded.gif" alt="" style="vertical-align: top;" onclick="javascript: ToggleAllSectionsVisibility();" />
+<span id="ExpandCollapseAllSpan" onclick="javascript: ToggleAllSectionsVisibility();">Collapse All</span>
+</div>
+</div>
+<div id="Contents">
+<a id="ContentsAnchor">&nbsp;</a>
+CharLengthAttribute is a constraint that defines the maximum size (number of characters) allowed for a given
+            property of type <a href="http://msdn.microsoft.com/library/s1wwdcbf.aspx" target="_top">System.String</a> and roughly correlates to a SQL VARCHAR(SIZE).
+<div id="ItemLocation">
+<b>Namespace:</b> <a href="../../Contents/1/3.html">HSS.Data.Storage</a><br />
+<b>Assembly:</b> <a href="../../Contents/1/1.html">HSS.Data.Storage.NET45</a>
+</div>
+<div id="SectionHeader0" class="SectionHeader">
+<img id="SectionExpanderImg0" src="../../GFX/BigSquareExpanded.gif" alt="Collapse/Expand" onclick="javascript: ToggleSectionVisibility(0);" />
+<span class="SectionHeader">
+<span class="ArrowCursor" onclick="javascript: ToggleSectionVisibility(0);">
+Syntax
+</span>
+</span>
+</div>
+
+<div id="SectionContainerDiv0" class="SectionContainer">
+<table class="CodeTable"><col width="100%" /><tr class="CodeTable"><th class="CodeTable">C#</th></tr><tr class="CodeTable"><td class="CodeTable"><table style="width: 100%;" class="InsideCodeBlock">
+<col width="0%" />
+<col width="100%" />
+<tr>
+<td class="NoWrapTop">public sealed class CharLengthAttribute :&nbsp;</td>
+<td>
+Attribute<br />
+</td>
+</tr>
+</table>
+</td></tr></table>
+<div class="TopLink"><a href="#ContentsAnchor">Top</a></div></div>
+<div id="SectionHeader1" class="SectionHeader">
+<img id="SectionExpanderImg1" src="../../GFX/BigSquareExpanded.gif" alt="Collapse/Expand" onclick="javascript: ToggleSectionVisibility(1);" />
+<span class="SectionHeader">
+<span class="ArrowCursor" onclick="javascript: ToggleSectionVisibility(1);">
+Remarks
+</span>
+</span>
+</div>
+
+<div id="SectionContainerDiv1" class="SectionContainer">
+<div class="RemarksContainer">
+<p>
+            This attribute is required on all properties of type <a href="http://msdn.microsoft.com/library/s1wwdcbf.aspx" target="_top">System.String</a>, unless you do not store the property (see <a href="../../Contents/1/23.html">DoNotStoreAttribute</a>).
+            </p>
+<p>
+            The minimum value for the <span class="Code">MaximumLenth</span> property is 1 and the maximum value is 2,048; and therefore the
+            largest string that can be stored in one property is 2,048 characters.
+            </p>
+<p>
+            Regardless of the <span class="Code">MaximumLenth</span> value, you can store an empty or null string, but if you attempted
+            to store more characters then defined, then you will receive a <a href="../../Contents/1/12.html">ConstraintException</a>.
+            </p>
+<p>
+            NOTE: In order to support your data models being used with the DataAnnotations library,
+            the HSS Database supports the use of the <span class="Code">StringLengthAttribute</span> in place of this
+            attribute. Also, take note, we only use the maximum length of this attribute not the
+            minimum, as the constraint is only meant to indicate the maximum length of the string
+            stored not whether or not it's a legimate value.
+            </p>
+</div>
+<div class="TopLink"><a href="#ContentsAnchor">Top</a></div></div>
+<div id="SectionHeader2" class="SectionHeader">
+<img id="SectionExpanderImg2" src="../../GFX/BigSquareExpanded.gif" alt="Collapse/Expand" onclick="javascript: ToggleSectionVisibility(2);" />
+<span class="SectionHeader">
+<span class="ArrowCursor" onclick="javascript: ToggleSectionVisibility(2);">
+Members
+</span>
+</span>
+</div>
+
+<div id="SectionContainerDiv2" class="SectionContainer">
+<p>Click <a href="../../Contents/1/33.html">here</a> to see the list of members.</p>
+<div class="TopLink"><a href="#ContentsAnchor">Top</a></div></div>
+<div id="SectionHeader3" class="SectionHeader">
+<img id="SectionExpanderImg3" src="../../GFX/BigSquareExpanded.gif" alt="Collapse/Expand" onclick="javascript: ToggleSectionVisibility(3);" />
+<span class="SectionHeader">
+<span class="ArrowCursor" onclick="javascript: ToggleSectionVisibility(3);">
+Example
+</span>
+</span>
+</div>
+
+<div id="SectionContainerDiv3" class="SectionContainer">
+<table class="ExampleCodeTable"><col width="100%" /><tr class="CodeTable"><th class="CodeTable">C#</th></tr><tr class="CodeTable"><td class="CodeTable"><pre>public class Program
+{
+	private void Main()
+	{
+		Database db = null;
+		try
+		{
+			db = new Database("MyDatabaseName", "c:\MyDataFolderPath");
+			var m = new MyModel() { ThreeCharString = "four" };
+			db.Add(m);
+		}
+		catch (ConstraintException cex)
+		{
+			MessageBox.Show(cex.Message);
+		}
+	}
+	class MyModel
+	{
+		[CharLength(3)]
+		public string ThreeCharString { get; set; }
+		
+		[StringLength(100)]
+		public string MyLongString { get; set; }
+		
+		[PrimaryKey(AutoIncrement = true)]
+		public int Id { get; set; }
+	}
+}
+</pre></td></tr></table>
+<div class="TopLink"><a href="#ContentsAnchor">Top</a></div></div>
+</div>
+<div id="Footer">
+<span class="Footer">Generated by <a href="http://immdocnet.codeplex.com/" target="_blank">ImmDoc .NET</a></span>.
+</div>
+
+</body>
+
+</html>

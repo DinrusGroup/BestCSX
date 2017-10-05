@@ -1,0 +1,164 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IceLocatorDiscovery</name>
+    </assembly>
+    <members>
+        <member name="T:IceLocatorDiscovery.LookupReplyOperations_">
+            <summary>
+            The Ice lookup reply interface must be implemented by clients which
+            are searching for Ice locators.
+            Ice locator implementations invoke
+            on this interface to provide their locator proxy.
+            
+            </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyOperations_.foundLocator(Ice.LocatorPrx,Ice.Current)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IceLocatorDiscovery.LookupReplyOperationsNC_">
+            <summary>
+            The Ice lookup reply interface must be implemented by clients which
+            are searching for Ice locators.
+            Ice locator implementations invoke
+            on this interface to provide their locator proxy.
+            
+            </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyOperationsNC_.foundLocator(Ice.LocatorPrx)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+        </member>
+        <member name="T:IceLocatorDiscovery.LookupOperations_">
+            <summary>
+            The Ice lookup interface is implemented by Ice locator
+            implementations and can be used by clients to find available Ice
+            locators on the network.
+            Ice locator implementations provide a well-known `Ice/LocatorLookup' 
+            object accessible through UDP multicast. Clients typically make a 
+            multicast findLocator request to find the locator proxy.
+            
+            </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupOperations_.findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx,Ice.Current)">
+            <summary>
+            Find a locator proxy with the given instance name.
+            </summary>
+            <param name="instanceName">Restrict the search to Ice registries
+            configured with the given instance name. If empty, all the
+            available registries will reply.
+            
+            </param>
+            <param name="reply">The reply object to use to send the reply.</param>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IceLocatorDiscovery.LookupOperationsNC_">
+            <summary>
+            The Ice lookup interface is implemented by Ice locator
+            implementations and can be used by clients to find available Ice
+            locators on the network.
+            Ice locator implementations provide a well-known `Ice/LocatorLookup' 
+            object accessible through UDP multicast. Clients typically make a 
+            multicast findLocator request to find the locator proxy.
+            
+            </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupOperationsNC_.findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx)">
+            <summary>
+            Find a locator proxy with the given instance name.
+            </summary>
+            <param name="instanceName">Restrict the search to Ice registries
+            configured with the given instance name. If empty, all the
+            available registries will reply.
+            
+            </param>
+            <param name="reply">The reply object to use to send the reply.</param>
+        </member>
+        <member name="T:IceLocatorDiscovery.LookupReplyPrxHelper">
+            <summary>
+            The Ice lookup reply interface must be implemented by clients which
+            are searching for Ice locators.
+            Ice locator implementations invoke
+            on this interface to provide their locator proxy.
+            
+            </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrxHelper.foundLocator(Ice.LocatorPrx)">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrxHelper.foundLocator(Ice.LocatorPrx,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupReplyPrxHelper.begin_foundLocator(Ice.LocatorPrx,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            This method is called by the implementation of the Lookup
+            interface to reply to a findLocator request.
+            </summary>
+            <param name="prx">The proxy of the locator.</param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="T:IceLocatorDiscovery.LookupPrxHelper">
+            <summary>
+            The Ice lookup interface is implemented by Ice locator
+            implementations and can be used by clients to find available Ice
+            locators on the network.
+            Ice locator implementations provide a well-known `Ice/LocatorLookup' 
+            object accessible through UDP multicast. Clients typically make a 
+            multicast findLocator request to find the locator proxy.
+            
+            </summary>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrxHelper.findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx)">
+            <summary>
+            Find a locator proxy with the given instance name.
+            </summary>
+            <param name="instanceName">Restrict the search to Ice registries
+            configured with the given instance name. If empty, all the
+            available registries will reply.
+            
+            </param>
+            <param name="reply">The reply object to use to send the reply.</param>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrxHelper.findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Find a locator proxy with the given instance name.
+            </summary>
+            <param name="instanceName">Restrict the search to Ice registries
+            configured with the given instance name. If empty, all the
+            available registries will reply.
+            
+            </param>
+            <param name="reply">The reply object to use to send the reply.</param>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceLocatorDiscovery.LookupPrxHelper.begin_findLocator(System.String,IceLocatorDiscovery.LookupReplyPrx,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Find a locator proxy with the given instance name.
+            </summary>
+            <param name="instanceName">Restrict the search to Ice registries
+            configured with the given instance name. If empty, all the
+            available registries will reply.
+            
+            </param>
+            <param name="reply">The reply object to use to send the reply.</param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+    </members>
+</doc>

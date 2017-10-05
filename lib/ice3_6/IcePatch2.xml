@@ -1,0 +1,545 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IcePatch2</name>
+    </assembly>
+    <members>
+        <member name="T:IcePatch2.PartitionOutOfRangeException">
+            <summary>
+            The partition argument for
+            FileServer.getFileInfoSeq was not in the range 0-255.
+            </summary>
+        </member>
+        <member name="T:IcePatch2.FileAccessException">
+            <summary>
+            This exception is raised if FileServer.getFileCompressed cannot read the
+            contents of a file.
+            </summary>
+        </member>
+        <member name="T:IcePatch2.FileSizeRangeException">
+            <summary>
+            This exception is raised if FileServer.getFileCompressed or
+            FileServer.getFileInfoSeq try to operate in files with size
+            large than 2.1 GB, these operations does not support working with
+            large files instead FileServer.getLargeFileCompressed and 
+            FileServer.getLargeFileInfoSeq must be used.
+            </summary>
+        </member>
+        <member name="T:IcePatch2.FileServerOperations_">
+            <summary>
+            The interface that provides access to files.
+            </summary>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getFileInfoSeq(System.Int32,Ice.Current)">
+             <summary>
+             Return the FileInfoSeq for the specified partition.
+            
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+            
+             If the
+             partion number is out of range, the operation throws
+             
+              This operation is deprecated, and only keep for
+             compativility with old Ice clients (older than version 3.6).
+             
+             PartitionOutOfRangException.
+             
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+             
+             </param>
+             <returns>A sequence containing the FileInfo structures for
+             files in the specified partition.</returns>
+             <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getLargeFileInfoSeq(System.Int32,Ice.Current)">
+            <summary>
+            Return the FileInfoSeq for the specified partition.
+            If the
+            partion number is out of range, the operation throws
+            PartitionOutOfRangException.
+            
+            </summary>
+            <param name="partition">The partition number in the range 0-255.
+            
+            </param>
+            <returns>A sequence containing the FileInfo structures for
+            files in the specified partition.</returns>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getChecksumSeq(Ice.Current)">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <returns>A sequence containing 256 checksums. Partitions with a
+            checksum that differs from the previous checksum for the same
+            partition contain updated files. Partitions with a checksum
+            that is identical to the previous checksum do not contain
+            updated files.</returns>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getChecksum(Ice.Current)">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            as for a previous run, the entire file set is up-to-date.
+            
+            </summary>
+            <returns>The master checksum for the file set.</returns>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getFileCompressed_async(IcePatch2.AMD_FileServer_getFileCompressed,System.String,System.Int32,System.Int32,Ice.Current)">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            </summary>
+            <param name="cb__">The callback object for the operation.</param>
+            <param name="path">The pathname (relative to the data directory) for
+            the file to be read.
+            
+            </param>
+            <param name="pos">The file offset at which to begin reading.
+            
+            </param>
+            <param name="num">The number of bytes to be read.
+            
+            </param>
+            <param name="current__">The Current object for the invocation.</param>
+            <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerOperations_.getLargeFileCompressed_async(IcePatch2.AMD_FileServer_getLargeFileCompressed,System.String,System.Int64,System.Int32,Ice.Current)">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            </summary>
+            <param name="cb__">The callback object for the operation.</param>
+            <param name="path">The pathname (relative to the data directory) for
+            the file to be read.
+            
+            </param>
+            <param name="pos">The file offset at which to begin reading.
+            
+            </param>
+            <param name="num">The number of bytes to be read.
+            
+            </param>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IcePatch2.FileServerOperationsNC_">
+            <summary>
+            The interface that provides access to files.
+            </summary>
+        </member>
+        <member name="M:IcePatch2.FileServerOperationsNC_.getFileInfoSeq(System.Int32)">
+             <summary>
+             Return the FileInfoSeq for the specified partition.
+            
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+            
+             If the
+             partion number is out of range, the operation throws
+             
+              This operation is deprecated, and only keep for
+             compativility with old Ice clients (older than version 3.6).
+             
+             PartitionOutOfRangException.
+             
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+             
+             </param>
+             <returns>A sequence containing the FileInfo structures for
+             files in the specified partition.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerOperationsNC_.getLargeFileInfoSeq(System.Int32)">
+            <summary>
+            Return the FileInfoSeq for the specified partition.
+            If the
+            partion number is out of range, the operation throws
+            PartitionOutOfRangException.
+            
+            </summary>
+            <param name="partition">The partition number in the range 0-255.
+            
+            </param>
+            <returns>A sequence containing the FileInfo structures for
+            files in the specified partition.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerOperationsNC_.getChecksumSeq">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <returns>A sequence containing 256 checksums. Partitions with a
+            checksum that differs from the previous checksum for the same
+            partition contain updated files. Partitions with a checksum
+            that is identical to the previous checksum do not contain
+            updated files.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerOperationsNC_.getChecksum">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            as for a previous run, the entire file set is up-to-date.
+            
+            </summary>
+            <returns>The master checksum for the file set.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerOperationsNC_.getFileCompressed_async(IcePatch2.AMD_FileServer_getFileCompressed,System.String,System.Int32,System.Int32)">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            </summary>
+            <param name="cb__">The callback object for the operation.</param>
+            <param name="path">The pathname (relative to the data directory) for
+            the file to be read.
+            
+            </param>
+            <param name="pos">The file offset at which to begin reading.
+            
+            </param>
+            <param name="num">The number of bytes to be read.
+            
+            </param>
+            <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerOperationsNC_.getLargeFileCompressed_async(IcePatch2.AMD_FileServer_getLargeFileCompressed,System.String,System.Int64,System.Int32)">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            </summary>
+            <param name="cb__">The callback object for the operation.</param>
+            <param name="path">The pathname (relative to the data directory) for
+            the file to be read.
+            
+            </param>
+            <param name="pos">The file offset at which to begin reading.
+            
+            </param>
+            <param name="num">The number of bytes to be read.
+            
+            </param>
+        </member>
+        <member name="T:IcePatch2.FileServerPrxHelper">
+            <summary>
+            The interface that provides access to files.
+            </summary>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getChecksum">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            as for a previous run, the entire file set is up-to-date.
+            
+            </summary>
+            <returns>The master checksum for the file set.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getChecksum(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            as for a previous run, the entire file set is up-to-date.
+            
+            </summary>
+            <returns>The master checksum for the file set.</returns>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getChecksumSeq">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <returns>A sequence containing 256 checksums. Partitions with a
+            checksum that differs from the previous checksum for the same
+            partition contain updated files. Partitions with a checksum
+            that is identical to the previous checksum do not contain
+            updated files.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getChecksumSeq(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <returns>A sequence containing 256 checksums. Partitions with a
+            checksum that differs from the previous checksum for the same
+            partition contain updated files. Partitions with a checksum
+            that is identical to the previous checksum do not contain
+            updated files.</returns>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getFileCompressed(System.String,System.Int32,System.Int32)">
+             <summary>
+             Read the specified file.
+            
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+            
+             If the read operation fails, the
+             operation throws FileAccessException. This operation may only
+             return fewer bytes than requested in case there was an
+             end-of-file condition.
+             
+              This operation is deprecated, and only keep for
+             compativility with old Ice clients (older than version 3.6).
+             
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+             
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+             
+             </param>
+             <param name="num">The number of bytes to be read.
+             
+             </param>
+             <returns>A sequence containing the compressed file contents.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getFileCompressed(System.String,System.Int32,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+             <summary>
+             Read the specified file.
+            
+             <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+            
+             If the read operation fails, the
+             operation throws FileAccessException. This operation may only
+             return fewer bytes than requested in case there was an
+             end-of-file condition.
+             
+              This operation is deprecated, and only keep for
+             compativility with old Ice clients (older than version 3.6).
+             
+             </summary>
+             <param name="path">The pathname (relative to the data directory) for
+             the file to be read.
+             
+             </param>
+             <param name="pos">The file offset at which to begin reading.
+             
+             </param>
+             <param name="num">The number of bytes to be read.
+             
+             </param>
+             <returns>A sequence containing the compressed file contents.</returns>
+             <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getFileInfoSeq(System.Int32)">
+             <summary>
+             Return the FileInfoSeq for the specified partition.
+            
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+            
+             If the
+             partion number is out of range, the operation throws
+             
+              This operation is deprecated, and only keep for
+             compativility with old Ice clients (older than version 3.6).
+             
+             PartitionOutOfRangException.
+             
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+             
+             </param>
+             <returns>A sequence containing the FileInfo structures for
+             files in the specified partition.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getFileInfoSeq(System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+             <summary>
+             Return the FileInfoSeq for the specified partition.
+            
+             <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+            
+             If the
+             partion number is out of range, the operation throws
+             
+              This operation is deprecated, and only keep for
+             compativility with old Ice clients (older than version 3.6).
+             
+             PartitionOutOfRangException.
+             
+             </summary>
+             <param name="partition">The partition number in the range 0-255.
+             
+             </param>
+             <returns>A sequence containing the FileInfo structures for
+             files in the specified partition.</returns>
+             <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getLargeFileCompressed(System.String,System.Int64,System.Int32)">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            operation throws FileAccessException. This operation may only
+            return fewer bytes than requested in case there was an
+            end-of-file condition.
+            
+            </summary>
+            <param name="path">The pathname (relative to the data directory) for
+            the file to be read.
+            
+            </param>
+            <param name="pos">The file offset at which to begin reading.
+            
+            </param>
+            <param name="num">The number of bytes to be read.
+            
+            </param>
+            <returns>A sequence containing the compressed file contents.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getLargeFileCompressed(System.String,System.Int64,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            operation throws FileAccessException. This operation may only
+            return fewer bytes than requested in case there was an
+            end-of-file condition.
+            
+            </summary>
+            <param name="path">The pathname (relative to the data directory) for
+            the file to be read.
+            
+            </param>
+            <param name="pos">The file offset at which to begin reading.
+            
+            </param>
+            <param name="num">The number of bytes to be read.
+            
+            </param>
+            <returns>A sequence containing the compressed file contents.</returns>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getLargeFileInfoSeq(System.Int32)">
+            <summary>
+            Return the FileInfoSeq for the specified partition.
+            If the
+            partion number is out of range, the operation throws
+            PartitionOutOfRangException.
+            
+            </summary>
+            <param name="partition">The partition number in the range 0-255.
+            
+            </param>
+            <returns>A sequence containing the FileInfo structures for
+            files in the specified partition.</returns>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.getLargeFileInfoSeq(System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Return the FileInfoSeq for the specified partition.
+            If the
+            partion number is out of range, the operation throws
+            PartitionOutOfRangException.
+            
+            </summary>
+            <param name="partition">The partition number in the range 0-255.
+            
+            </param>
+            <returns>A sequence containing the FileInfo structures for
+            files in the specified partition.</returns>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.begin_getChecksum(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Return the master checksum for all partitions.
+            If this checksum is the same
+            </summary>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.begin_getChecksumSeq(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Return the checksums for all partitions.
+            </summary>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.begin_getFileCompressed(System.String,System.Int32,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            </summary>
+            <param name="path">The pathname (relative to the data directory) for
+            the file to be read.
+            
+            </param>
+            <param name="pos">The file offset at which to begin reading.
+            
+            </param>
+            <param name="num">The number of bytes to be read.
+            
+            </param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+            <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.begin_getFileInfoSeq(System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Return the FileInfoSeq for the specified partition.
+            If the
+            </summary>
+            <param name="partition">The partition number in the range 0-255.
+            
+            </param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+            <para>getFileInfoSeq() is deprecated, use getLargeFileInfoSeq() instead.</para>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.begin_getLargeFileCompressed(System.String,System.Int64,System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            </summary>
+            <param name="path">The pathname (relative to the data directory) for
+            the file to be read.
+            
+            </param>
+            <param name="pos">The file offset at which to begin reading.
+            
+            </param>
+            <param name="num">The number of bytes to be read.
+            
+            </param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IcePatch2.FileServerPrxHelper.begin_getLargeFileInfoSeq(System.Int32,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Return the FileInfoSeq for the specified partition.
+            If the
+            </summary>
+            <param name="partition">The partition number in the range 0-255.
+            
+            </param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="T:IcePatch2.AMD_FileServer_getFileCompressed">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            operation throws FileAccessException. This operation may only
+            return fewer bytes than requested in case there was an
+            end-of-file condition.
+            
+             This operation is deprecated, and only keep for
+            compativility with old Ice clients (older than version 3.6).
+            
+            <para>getFileCompressed() is deprecated, use getLargeFileCompressed() instead.</para>
+            </summary>
+        </member>
+        <member name="M:IcePatch2.AMD_FileServer_getFileCompressed.ice_response(System.Byte[])">
+            <summary>
+            ice_response indicates that
+            the operation completed successfully.
+            </summary>
+            <param name="ret__">(return value) A sequence containing the compressed file contents.</param>
+        </member>
+        <member name="T:IcePatch2.AMD_FileServer_getLargeFileCompressed">
+            <summary>
+            Read the specified file.
+            If the read operation fails, the
+            operation throws FileAccessException. This operation may only
+            return fewer bytes than requested in case there was an
+            end-of-file condition.
+            
+            </summary>
+        </member>
+        <member name="M:IcePatch2.AMD_FileServer_getLargeFileCompressed.ice_response(System.Byte[])">
+            <summary>
+            ice_response indicates that
+            the operation completed successfully.
+            </summary>
+            <param name="ret__">(return value) A sequence containing the compressed file contents.</param>
+        </member>
+    </members>
+</doc>

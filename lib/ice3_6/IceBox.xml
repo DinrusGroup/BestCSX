@@ -1,0 +1,269 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>IceBox</name>
+    </assembly>
+    <members>
+        <member name="T:IceBox.FailureException">
+            <summary>
+            This exception is a general failure notification.
+            It is thrown
+            for errors such as a service encountering an error during
+            initialization, or the service manager being unable
+            to load a service executable.
+            </summary>
+        </member>
+        <member name="T:IceBox.AlreadyStartedException">
+            <summary>
+            This exception is thrown if an attempt is made to start an
+            already-started service.
+            </summary>
+        </member>
+        <member name="T:IceBox.AlreadyStoppedException">
+            <summary>
+            This exception is thrown if an attempt is made to stop an
+            already-stopped service.
+            </summary>
+        </member>
+        <member name="T:IceBox.NoSuchServiceException">
+            <summary>
+            This exception is thrown if a service name does not refer
+            to an existing service.
+            </summary>
+        </member>
+        <member name="M:IceBox.Service.start(System.String,Ice.Communicator,System.String[])">
+            <summary>
+            Start the service.
+            The given communicator is created by the
+            ServiceManager for use by the service. This communicator may
+            also be used by other services, depending on the service
+            configuration.
+            
+            The ServiceManager owns this communicator, and is
+            responsible for destroying it.
+            
+            </summary>
+            <param name="name">The service's name, as determined by the
+            configuration.
+            
+            </param>
+            <param name="communicator">A communicator for use by the service.
+            
+            </param>
+            <param name="args">The service arguments that were not converted into
+            properties.
+            
+            </param>
+            <exception name="FailureException">Raised if start failed.</exception>
+        </member>
+        <member name="M:IceBox.Service.stop">
+            <summary>
+            Stop the service.
+            </summary>
+        </member>
+        <member name="T:IceBox.ServiceObserverOperations_">
+            <summary>
+            An Observer interface implemented by admin clients
+            interested in the status of services
+            
+            </summary>
+        </member>
+        <member name="T:IceBox.ServiceObserverOperationsNC_">
+            <summary>
+            An Observer interface implemented by admin clients
+            interested in the status of services
+            
+            </summary>
+        </member>
+        <member name="T:IceBox.ServiceManagerOperations_">
+            <summary>
+            Administers a set of Service instances.
+            </summary>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.getSliceChecksums(Ice.Current)">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.startService(System.String,Ice.Current)">
+            <summary>
+            Start an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.stopService(System.String,Ice.Current)">
+            <summary>
+            Stop an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.addObserver(IceBox.ServiceObserverPrx,Ice.Current)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperations_.shutdown(Ice.Current)">
+            <summary>
+            Shut down all services.
+            This causes Service.stop to be
+            invoked on all configured services.
+            </summary>
+            <param name="current__">The Current object for the invocation.</param>
+        </member>
+        <member name="T:IceBox.ServiceManagerOperationsNC_">
+            <summary>
+            Administers a set of Service instances.
+            </summary>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperationsNC_.getSliceChecksums">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperationsNC_.startService(System.String)">
+            <summary>
+            Start an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperationsNC_.stopService(System.String)">
+            <summary>
+            Stop an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperationsNC_.addObserver(IceBox.ServiceObserverPrx)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerOperationsNC_.shutdown">
+            <summary>
+            Shut down all services.
+            This causes Service.stop to be
+            invoked on all configured services.
+            </summary>
+        </member>
+        <member name="T:IceBox.ServiceObserverPrxHelper">
+            <summary>
+            An Observer interface implemented by admin clients
+            interested in the status of services
+            
+            </summary>
+        </member>
+        <member name="T:IceBox.ServiceManagerPrxHelper">
+            <summary>
+            Administers a set of Service instances.
+            </summary>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.addObserver(IceBox.ServiceObserverPrx)">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.addObserver(IceBox.ServiceObserverPrx,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.getSliceChecksums">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.getSliceChecksums(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <returns>A dictionary mapping Slice type ids to their checksums.</returns>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.shutdown">
+            <summary>
+            Shut down all services.
+            This causes Service.stop to be
+            invoked on all configured services.
+            </summary>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.shutdown(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Shut down all services.
+            This causes Service.stop to be
+            invoked on all configured services.
+            </summary>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.startService(System.String)">
+            <summary>
+            Start an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.startService(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Start an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.stopService(System.String)">
+            <summary>
+            Stop an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.stopService(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Stop an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+            <param name="context__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.begin_addObserver(IceBox.ServiceObserverPrx,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Registers a new observer with the ServiceManager.
+            </summary>
+            <param name="observer">The new observer</param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.begin_getSliceChecksums(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Returns the checksums for the IceBox Slice definitions.
+            </summary>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.begin_shutdown(System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Shut down all services.
+            This causes Service.stop to be
+            </summary>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.begin_startService(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Start an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+        <member name="M:IceBox.ServiceManagerPrxHelper.begin_stopService(System.String,System.Collections.Generic.Dictionary{System.String,System.String})">
+            <summary>
+            Stop an individual service.
+            </summary>
+            <param name="service">The service name.</param>
+            <param name="ctx__">The Context map to send with the invocation.</param>
+        </member>
+    </members>
+</doc>

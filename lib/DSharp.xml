@@ -1,0 +1,1735 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>DSharp</name>
+    </assembly>
+    <members>
+        <member name="T:DSharp.Completion.AbstractTooltipContent">
+            <summary>
+            Encapsules tooltip content.
+            If there are more than one tooltip contents, there are more than one resolve results
+            </summary>
+        </member>
+        <member name="T:DSharp.Completion.Providers.UFCSCompletionProvider">
+            <summary>
+            Adds method items to the completion list if the current expression's type is matching the methods' first parameter
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.ITypeDeclaration.ExpressesVariableAccess">
+            <summary>
+            Used e.g. if it's known that a type declaration expresses a variable's name
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.AbstractTypeDeclaration.Location">
+            <summary>
+            The type declaration's start location.
+            If inner declaration given, its start location will be returned.
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.AbstractTypeDeclaration.NonInnerTypeDependendLocation">
+            <summary>
+            The actual start location without regarding inner declarations.
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.AttributeMetaDeclaration.Location">
+            <summary>
+            The start location of the first given attribute
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.AttributeMetaDeclarationSection">
+            <summary>
+            Describes a meta block that begins with a colon. 'Ends' right after the colon.
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.AttributeMetaDeclarationBlock">
+            <summary>
+            Describes a meta block that is enclosed by curly braces.
+            Examples are
+            static if(...){
+            }
+            
+            @safe{
+            }
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.MetaDeclarationBlock">
+            <summary>
+            A simple block that is just used for code alignment but semantically irrelevant elsehow.
+            {
+            	int cascadedIntDecl;
+            }
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.INode.AssignFrom(DSharp.Dom.INode)">
+            <summary>
+            Assigns a node's properties
+            </summary>
+            <param name="Other"></param>
+        </member>
+        <member name="M:DSharp.Dom.DNode.ToString(System.Boolean,System.Boolean)">
+            <summary>
+            Returns attributes, type and name combined to one string
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DSharp.Dom.DBlockNode.StaticStatements">
+            <summary>
+            Used for storing import statement and similar stuff
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.DBlockNode.MetaBlocks">
+            <summary>
+            Used for storing e.g. accessor attribute blocks
+            private {
+            }
+            @safe:
+            or
+            static if(...) {
+            }
+            Primarily used for formatting reasons later on.
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.DBlockNode.GetMetaBlockStack(DSharp.Dom.CodeLocation,System.Boolean,System.Boolean)">
+            <summary>
+            Returns an array consisting of meta declarations orderd from outer to inner-most, depending on the 'Where' parameter.
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.DMethod.ConstructorIdentifier">
+            <summary>
+            Used to identify constructor methods. Since it'd be a token otherwise it cannot be used as a regular method's name.
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.DMethod.AdditionalChildren">
+            <summary>
+            Children which were added artifically via Add() or AddRange()
+            In most cases, these are anonymous delegate/class declarations.
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.DMethod.IsUFCSReady">
+            <summary>
+            Returns true if the function has got at least one parameter and is a direct child of an abstract syntax tree.
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.EponymousTemplate">
+            <summary>
+            enum isIntOrFloat(T) = is(T == int) || is(T == float);
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.ModulePackage.GetModule(System.Int32)">
+            <summary>
+            Looks up a sub-module. Unlike GetModule(string name), there is no sub-package lookup!!
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.RootPackage.ObjectClass">
+            <summary>
+            To improve resolution performance, the object class that can be defined only once will be stored over here.
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.RootPackage.ObjectClassResult">
+            <summary>
+            See <see cref="P:DSharp.Dom.RootPackage.ObjectClass"/>
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.NodeDictionary">
+            <summary>
+            Stores node children. Thread safe.
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.NodeDictionary.children">
+            <summary>
+            For faster enum access, store a separate list of INodes
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.ITemplateParameterDeclaration">
+            <summary>
+            void foo(U) (U u) {
+            	u. -- now the type of u is needed. A ITemplateParameterDeclaration will be returned which holds U.
+            }
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.GotoLabelIndentStyle.LeftJustify">
+            <summary>Place goto labels in the leftmost column</summary>
+        </member>
+        <member name="F:DSharp.Formatting.GotoLabelIndentStyle.OneLess">
+            <summary>
+            Place goto labels one indent less than current
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.GotoLabelIndentStyle.Normal">
+            <summary>
+            Indent goto labels normally
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.DFormattingOptions.TypeBlockBraces">
+            <summary>
+            For classes, struct definitions etc.
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.DFormattingOptions.ForceVarInitializerOnSameLine">
+            <summary>
+            int a = 34; // Shall '= 34' be forced to reside on the same line as 'int a'?
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.DFormattingOptions.ForceNodeNameOnSameLine">
+            <summary>
+            Forces a declaration's name to stay on the same line as its type.
+            int a; // Shall 'a' be placed on the same line or could it stay somewhere else?
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.DFormattingOptions.MultiVariableDeclPlacement">
+            <summary>
+            int a, b, c; -- Should a,b,c be placed on the same line, or on a new line?
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.DefaultDepthFirstVisitor.VisitBlock(DSharp.Dom.DBlockNode)">
+            <summary>
+            Calls VisitDNode already.
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.DefaultDepthFirstVisitor.VisitChildren(DSharp.Dom.Statements.StatementContainingStatement)">
+            <summary>
+            Visit abstract stmt
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.DFormattingVisitor.SingleLineComments">
+            <summary>
+            Keeps start locations of single line comments of the entire ast.
+            Used for checking whether offsets are inside those or not. Not null.
+            </summary>
+        </member>
+        <member name="M:DSharp.Formatting.DFormattingVisitor.WalkThroughAst">
+            <summary>
+            Use this method for letting this visitor visit the syntax tree.
+            </summary>
+        </member>
+        <member name="M:DSharp.Formatting.DFormattingVisitor.GetCommentsBefore(DSharp.Dom.CodeLocation,System.Int32@)">
+            <summary>
+            Returns a comment chain that is located right before 'where'
+            </summary>
+        </member>
+        <member name="M:DSharp.Formatting.DFormattingVisitor.IsLineIsEmptyUpToEol(System.Int32)">
+            <summary>
+            Counts backward from startOffset and returns true, if the entire line only consists of white spaces
+            </summary>
+        </member>
+        <member name="M:DSharp.Formatting.DFormattingVisitor.FormatAttributedNode(DSharp.Dom.DNode,System.Boolean)">
+            <summary>
+            Call before pushing a new indent level and before call base.Visit for the respective node!
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.TextDocument.lines">
+            <summary>
+            Contains the start offsets of each line
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.IndentType.Negative">
+            <summary>
+            Negative block indent. Used for section attribute.
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.Indent.IndentEngine.keepAlignmentSpaces">
+            <summary>
+            True if spaces shall be kept for aligning code.
+            False if spaces shall be replaced by tabs and only the few remaining spaces are used for aligning.
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.Indent.IndentEngine.pc">
+            <summary>
+            Previous char in the line
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.Indent.IndentEngine.rc">
+            <summary>
+            last significant (real) char in the line
+            (e.g. non-whitespace, not in a comment, etc)
+            </summary>
+        </member>
+        <member name="F:DSharp.Formatting.Indent.IndentEngine.prc">
+            <summary>
+            previous last significant (real) char in the line
+            </summary>
+        </member>
+        <member name="M:DSharp.Formatting.Indent.IndentEngine.Construct">
+            <summary>
+            Required for cloning.
+            </summary>
+        </member>
+        <member name="M:DSharp.Formatting.Indent.IndentEngine.Push(System.Char)">
+            <summary>
+            The engine's main logic
+            </summary>
+        </member>
+        <member name="T:DSharp.Formatting.Indent.IndentStack">
+            <summary>
+            Description of IndentStack.
+            </summary>
+        </member>
+        <member name="T:DSharp.Misc.Mangling.Demangler">
+            <summary>
+            Description of Demangler.
+            </summary>
+        </member>
+        <member name="M:DSharp.Misc.Mangling.Demangler.RemoveNestedTemplateRefsFromQualifier(DSharp.Dom.ITypeDeclaration)">
+            <summary>
+            Removes the second 'put' from std.stdio.File.LockingTextWriter.put!(char).put
+            </summary>
+        </member>
+        <member name="T:DSharp.Misc.StringView">
+            <summary>
+            Read substrings out of a string without copying it.
+            </summary>
+        </member>
+        <member name="T:DSharp.Refactoring.DeepASTVisitor">
+            <summary>
+            Visits an entire AST including all its expressions, statements and type declarations.
+            Made to inspect all kinds of identifiable syntax regions, such as single identifiers or template instance expressions.
+            </summary>
+        </member>
+        <member name="M:DSharp.Refactoring.DeepASTVisitor.Handle(DSharp.Dom.ISyntaxRegion)">
+            <summary></summary>
+            <param name="o">Will always be of type
+            PostfixExpression_Access, IdentifierExpression, TemplateInstanceExpression or IdentifierDeclaration</param>
+        </member>
+        <member name="M:DSharp.Refactoring.DeepASTVisitor.ExtractIdLocation(DSharp.Dom.ISyntaxRegion,System.Int32@)">
+            <summary>
+            Used to extract the adequate code location + the identifier length
+            </summary>
+        </member>
+        <member name="M:DSharp.Refactoring.ReferencesFinder.Scan(DSharp.Dom.DModule,DSharp.Dom.INode,DSharp.Resolver.ResolutionContext,System.Boolean)">
+            <summary>
+            </summary>
+            <param name="ast">The syntax tree to scan</param>
+            <param name="symbol">Might not be a child symbol of ast</param>
+            <param name="ctxt">The context required to search for symbols</param>
+            <returns></returns>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.Caching.ExpressionCache.EvEntry.argumentValueHashes">
+            <summary>
+            The hashes of the argument values.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.TryDoCTFEOrGetValueRefs(DSharp.Resolver.AbstractType[],DSharp.Dom.Expressions.IExpression,System.Boolean,DSharp.Resolver.ExpressionSemantics.ISymbolValue[])">
+            <summary>
+            Evaluates the identifier/template instance as usual.
+            If the id points to a variable, the initializer/dynamic value will be evaluated using its initializer.
+            
+            If ImplicitlyExecute is false but value evaluation is switched on, an InternalOverloadValue-object will be returned
+            that keeps all overloads passed via 'overloads'
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.E_MathOp(DSharp.Dom.Expressions.OperatorBasedExpression,DSharp.Resolver.ISemantic,DSharp.Resolver.ISemantic)">
+            <summary>
+            a + b; a - b; etc.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.HandleSingleMathOp(DSharp.Dom.Expressions.IExpression,DSharp.Resolver.ISemantic,DSharp.Resolver.ISemantic,DSharp.Resolver.ExpressionSemantics.Evaluation.MathOp)">
+            <summary>
+            Handles mathemathical operation.
+            If l and r are both primitive values, the MathOp delegate is executed.
+            
+            TODO: Operator overloading.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.GetConstructors(DSharp.Resolver.TemplateIntermediateType,System.Boolean)">
+            <summary>
+            Returns all constructors from the given class or struct.
+            If no explicit constructor given, an artificial implicit constructor method stub will be created.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.E(DSharp.Dom.Expressions.IsExpression)">
+            <summary>
+            http://dlang.org/expression.html#IsExpression
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.evalIsExpression_EvalSpecToken(DSharp.Dom.Expressions.IsExpression,DSharp.Resolver.AbstractType,System.Boolean)">
+            <summary>
+            Item1 - True, if isExpression returns true
+            Item2 - If Item1 is true, it contains the type of the alias that is defined in the isExpression 
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.Evaluation.eval">
+            <summary>
+            True, if the expression's value shall be evaluated.
+            False, if the expression's type is wanted only.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.Evaluation.ValueProvider">
+            <summary>
+            Is not null if the expression value shall be evaluated.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.EvaluateValue(DSharp.Dom.Expressions.IExpression,DSharp.Resolver.ResolutionContext,System.Boolean)">
+            <summary>
+            Uses the standard value provider for expression value evaluation
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.EvaluateTypes(DSharp.Dom.Expressions.IExpression,DSharp.Resolver.ResolutionContext)">
+            <summary>
+            Since most expressions should return a single type only, it's not needed to use this function unless you might
+            want to pay attention on (illegal) multiple overloads.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.Evaluation.evaluationDepth">
+            <summary>
+            HACK: SO prevention
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.GetVariableContents(DSharp.Resolver.ExpressionSemantics.ISymbolValue,DSharp.Resolver.ExpressionSemantics.AbstractSymbolValueProvider)">
+            <summary>
+            Removes all variable references by resolving them via the given value provider.
+            Useful when only the value is of interest, not its container or other things.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.E(DSharp.Dom.Expressions.PostfixExpression_Access,DSharp.Resolver.ISemantic,System.Boolean,System.Boolean)">
+            <summary>
+            Returns either all unfiltered and undeduced overloads of a member of a base type/value (like b from type a if the expression is a.b).
+            if <param name="EvalAndFilterOverloads"></param> is false.
+            If true, all overloads will be deduced, filtered and evaluated, so that (in most cases,) a one-item large array gets returned
+            which stores the return value of the property function b that is executed without arguments.
+            Also handles UFCS - so if filtering is wanted, the function becom
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.Evaluation.prepareMemberTraitExpression(DSharp.Dom.Expressions.TraitsExpression,DSharp.Resolver.AbstractType@)">
+            <summary>
+            Used when evaluating traits.
+            Evaluates the first argument to <param name="t">t</param>, 
+            takes the second traits argument, tries to evaluate it to a string, and puts it + the first arg into an postfix_access expression
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.ExpressionHelper.SearchExpressionDeeply(DSharp.Dom.Expressions.IExpression,DSharp.Dom.CodeLocation)">
+            <summary>
+            Scans through all container expressions recursively and returns the one that's nearest to 'Where'.
+            Will return 'e' if nothing found or if there wasn't anything to scan
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.AbstractSymbolValueProvider.GetLocal(System.String,DSharp.Dom.Expressions.IdentifierExpression)">
+            <summary>
+            Searches a local/parameter variable and returns the node
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.AbstractSymbolValueProvider.CurrentArrayLength">
+            <summary>
+            Used for $ operands inside index/slice expressions.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ExpressionSemantics.StandardValueProvider">
+            <summary>
+            This provider is used for constant values evaluation.
+            'Locals' aren't provided whereas requesting a variable's constant
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ExpressionSemantics.LValue">
+            <summary>
+            An expression value that is allowed to have a new value assigned to as in 'a = b;'
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ExpressionSemantics.VariableValue">
+            <summary>
+            Contains a reference to a DVariable node.
+            To get the actual value of the variable, use the value provider.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ExpressionSemantics.StaticVariableValue">
+            <summary>
+            Used for static properties.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ExpressionSemantics.ArrayPointer">
+            <summary>
+            Used for accessing entries from an array.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.ArrayPointer.ItemNumber">
+            <summary>
+            Used when accessing normal arrays.
+            If -1, a item passed to Set() will be added instead of replaced.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.ArrayPointer.#ctor(DSharp.Dom.DVariable,DSharp.Resolver.ArrayType,System.Int32)">
+            <summary>
+            Array ctor.
+            </summary>
+            <param name="accessedItem">0 - the array's length-1; -1 when adding the item is wished.</param>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.AssocArrayPointer.Key">
+            <summary>
+            Used to identify the accessed item.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.PrimitiveValue.Value">
+            <summary>
+            To make math operations etc. more efficient, use the largest available structure to store scalar values.
+            Also representing single characters etc.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ExpressionSemantics.PrimitiveValue.ImaginaryPart">
+            <summary>
+            (For future use) For complex number handling, there's an extra value for storing the imaginary part of a number.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.PrimitiveValue.#ctor(System.Byte,DSharp.Dom.Expressions.IExpression)">
+            <summary>
+            NaN constructor
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.ArrayValue.#ctor(DSharp.Resolver.ArrayType,DSharp.Dom.Expressions.IdentifierExpression)">
+            <summary>
+            String constructor.
+            Given result stores both type and idenfitierexpression whose Value is used as content
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.ArrayValue.#ctor(DSharp.Resolver.ArrayType,System.String)">
+            <summary>
+            String constructor.
+            Used for generating string results 'internally'.
+            </summary>
+        </member>
+        <member name="P:DSharp.Resolver.ExpressionSemantics.ArrayValue.StringValue">
+            <summary>
+            If this represents a string, the string will be returned. Otherwise null.
+            </summary>
+        </member>
+        <member name="P:DSharp.Resolver.ExpressionSemantics.ArrayValue.Elements">
+            <summary>
+            If not a string, the evaluated elements will be returned. Otherwise null.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ExpressionSemantics.DelegateValue">
+            <summary>
+            Used for both delegates and function references.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ExpressionSemantics.InstanceValue.RunInitializers">
+            <summary>
+            Initializes all variables that have gotten an explicit initializer.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ExpressionSemantics.TypeValue">
+            <summary>
+            Stores a type. Used e.g. as foreexpressions for PostfixExpressions.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ExpressionSemantics.InternalOverloadValue">
+            <summary>
+            Used when passing several function overloads from the inner evaluation function to the outer (i.e. method call) one.
+            Not intended to be used in any other kind.
+            </summary>
+        </member>
+        <!-- Некорректный комментарий в формате XML для члена "F:DSharp.Misc.CompletionOptions.EnableDeclarationConstraints" проигнорирован -->
+        <member name="M:DSharp.Misc.ModuleNameHelper.ExtractPackageName(System.String)">
+            <summary>
+            a.b.c.d => a.b.c
+            </summary>
+        </member>
+        <member name="M:DSharp.Misc.ModuleNameHelper.ExtractModuleName(System.String)">
+            <summary>
+            a.b.c.d => d
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ASTScanner.AbstractVisitor.PrefilterSubnodes(DSharp.Dom.IBlockNode)">
+            <summary>
+            Used in NameScans to filter out unwanted items. Otherwise simply returns the children of the block node passed as argument.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ASTScanner.AbstractVisitor.HandleItem(DSharp.Dom.INode)">
+            <summary>
+            Return true if search shall stop(!), false if search shall go on
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ASTScanner.AbstractVisitor.ScanStatementHierarchy(DSharp.Dom.Statements.IStatement,DSharp.Dom.CodeLocation,DSharp.Resolver.ASTScanner.MemberFilter)">
+            <summary>
+            Walks up the statement scope hierarchy and enlists all declarations that have been made BEFORE the caret position. 
+            (If CodeLocation.Empty given, this parameter will be ignored)
+            </summary>
+            <returns>True if scan shall stop, false if not</returns>
+        </member>
+        <member name="M:DSharp.Resolver.ASTScanner.AbstractVisitor.HandleDBlockNode(DSharp.Dom.DBlockNode,DSharp.Resolver.ASTScanner.MemberFilter,System.Boolean)">
+            <summary>
+            Handle the node's static statements (but not the node itself)
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ASTScanner.AbstractVisitor.HandleMixin(DSharp.Dom.Statements.MixinStatement,System.Boolean,DSharp.Resolver.ASTScanner.MemberFilter)">
+            <summary>
+            Evaluates the literal given as expression and tries to parse it as a string.
+            Important: Assumes all its compilation conditions to be checked already!
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ASTScanner.AbstractVisitor.dontHandleTemplateParamsInNodeScan">
+            <summary>
+            Temporary flag that is used for telling scanChildren() not to handle template parameters.
+            Used to prevent the insertion of a template mixin's parameter set into the completion list etc.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ASTScanner.SingleNodeNameScan.SearchChildrenAndResolve(DSharp.Resolver.ResolutionContext,DSharp.Dom.IBlockNode,System.Int32,System.Object)">
+            <summary>
+            Scans a block node. Not working with DMethods.
+            Automatically resolves node matches so base types etc. will be specified directly after the search operation.
+            </summary>
+        </member>
+        <member name="T:DSharp.Misc.UFCSCache">
+            <summary>
+            Contains resolution results of methods.
+            </summary>
+        </member>
+        <member name="M:DSharp.Misc.UFCSCache.BeginUpdate(DSharp.Misc.ParseCacheView,DSharp.Resolver.ConditionalCompilationFlags)">
+            <summary>
+            Returns false if cache is already updating.
+            </summary>
+        </member>
+        <member name="P:DSharp.Resolver.AbstractType.TypeDeclarationOf">
+            <summary>
+            Returns either the original type declaration that was used to instantiate this abstract type
+            OR creates an artificial type declaration that represents this type.
+            May returns null.
+            </summary>
+        </member>
+        <member name="P:DSharp.Resolver.AbstractType.Modifier">
+            <summary>
+            e.g. const, immutable
+            </summary>
+        </member>
+        <member name="P:DSharp.Resolver.AssocArrayType.ValueType">
+            <summary>
+            Aliases <see cref="!:Base"/>
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.DSymbol.DeducedTypes">
+            <summary>
+            Key: Type name
+            Value: Corresponding type
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.MemberSymbol.FirstArgument">
+            <summary>
+            'Transmitter' helper variable used for UFCS resolution.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.StaticProperty.n">
+            <summary>
+            For keeping the weak reference up!
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.TemplateParameterSymbol.ParameterValue">
+            <summary>
+            Only used for template value parameters.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ArrayAccessSymbol">
+            <summary>
+            Intermediate result when evaluating e.g. myArray[0]
+            Required for proper completion of array access expressions (e.g. foo[0].)
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.DTuple">
+            <summary>
+            A Tuple is not a type, an expression, or a symbol. It is a sequence of any mix of types, expressions or symbols.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.MixinAnalysis">
+            <summary>
+            Description of MixinAnalysis.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ResolutionCache`1.Add(DSharp.Resolver.ResolutionContext,DSharp.Dom.ISyntaxRegion,`0)">
+            <summary>
+            Adds a result to the cache.
+            Warning: Does not check for double occurences of the same set of surrounding template parameters - 
+            		 so call TryGet first to ensure that the element hasn't been enlisted yet under these specific circumstances.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ResolutionOptions.DontResolveBaseClasses">
+            <summary>
+            If passed, base classes will not be resolved in any way.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ResolutionOptions.DontResolveBaseTypes">
+            <summary>
+            If passed, variable/method return types will not be evaluated. 
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ResolutionOptions.NoTemplateParameterDeduction">
+            <summary>
+            If set, the resolver won't filter out members by template parameter deduction.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ResultComparer">
+            <summary>
+            Provides methods to check if resolved types are matching each other and/or can be converted into each other.
+            Used for UFCS completion, argument-parameter matching, template parameter deduction
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ResultComparer.IsEqual(DSharp.Resolver.ISemantic,DSharp.Resolver.ISemantic)">
+            <summary>
+            Checks given results for type equality
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ResultComparer.IsImplicitlyConvertible(DSharp.Resolver.ISemantic,DSharp.Resolver.AbstractType,DSharp.Resolver.ResolutionContext)">
+            <summary>
+            Checks results for implicit type convertability 
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.Templates.SpecializationOrdering">
+            <summary>
+            See http://msdn.microsoft.com/de-de/library/zaycz069.aspx
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.Templates.SpecializationOrdering.IsMoreSpecialized(DSharp.Dom.TemplateTypeParameter,DSharp.Dom.TemplateTypeParameter,System.Collections.Generic.Dictionary{System.Int32,DSharp.Resolver.ISemantic})">
+            <summary>
+            Tests if t1 is more specialized than t2
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.Templates.TemplateParameterDeduction.TargetDictionary">
+            <summary>
+            The dictionary which stores all deduced results + their names
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.Templates.TemplateParameterDeduction.ctxt">
+            <summary>
+            Needed for resolving default types
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.Templates.TemplateParameterDeduction.Contains(System.Int32)">
+            <summary>
+            Returns true if <param name="parameterName">parameterName</param> is expected somewhere in the template parameter list.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.Templates.TemplateParameterDeduction.Set(DSharp.Dom.TemplateParameter,DSharp.Resolver.ISemantic,System.Int32)">
+            <summary>
+            Returns false if the item has already been set before and if the already set item is not equal to 'r'.
+            Inserts 'r' into the target dictionary and returns true otherwise.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.Templates.TemplateParameterDeduction.CheckForTixIdentifierEquality(DSharp.Dom.DNode[],DSharp.Dom.INode)">
+            <summary>
+            Returns true if both template instance identifiers are matching each other or if the parameterSpeci
+            </summary>
+        </member>
+        <member name="P:DSharp.Resolver.Templates.TemplateParameterDeduction.EnforceTypeEqualityWhenDeducing">
+            <summary>
+            If true and deducing a type parameter,
+            the equality of the given and expected type is required instead of their simple convertibility.
+            Used when evaluating IsExpressions.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.TemplateInstanceHandler.DeduceParamsAndFilterOverloads(System.Collections.Generic.IEnumerable{DSharp.Resolver.AbstractType},System.Collections.Generic.IEnumerable{DSharp.Resolver.ISemantic},System.Boolean,DSharp.Resolver.ResolutionContext,System.Boolean)">
+            <summary>
+            Associates the given arguments with the template parameters specified in the type/method declarations 
+            and filters out unmatching overloads.
+            </summary>
+            <param name="rawOverloadList">Can be either type results or method results</param>
+            <param name="givenTemplateArguments">A list of already resolved arguments passed explicitly 
+            in the !(...) section of a template instantiation 
+            or call arguments given in the (...) appendix 
+            that follows a method identifier</param>
+            <param name="isMethodCall">If true, arguments that exceed the expected parameter count will be ignored as far as all parameters could be satisfied.</param>
+            <param name="ctxt"></param>
+            <returns>A filtered list of overloads which mostly fit to the specified arguments.
+            Usually contains only 1 element.
+            The 'TemplateParameters' property of the results will be also filled for further usage regarding smart completion etc.</returns>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.ResolveIdentifier(System.Int32,DSharp.Resolver.ResolutionContext,System.Object,System.Boolean)">
+            <summary>
+            Resolves an identifier and returns the definition + its base type.
+            Does not deduce any template parameters or nor filters out unfitting template specifications!
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.ResolveSingle(System.String,DSharp.Resolver.ResolutionContext,System.Object,System.Boolean)">
+            <summary>
+            See <see cref="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.ResolveIdentifier(System.String,DSharp.Resolver.ResolutionContext,System.Object,System.Boolean)"/>
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.ResolveSingle(DSharp.Dom.IdentifierDeclaration,DSharp.Resolver.ResolutionContext,DSharp.Resolver.AbstractType[],System.Boolean)">
+            <summary>
+            See <see cref="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.Resolve(DSharp.Dom.DTokenDeclaration)"/>
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.ResolveFurtherTypeIdentifier(System.Int32,System.Collections.Generic.IEnumerable{DSharp.Resolver.AbstractType},DSharp.Resolver.ResolutionContext,System.Object)">
+            <summary>
+            Used for searching further identifier list parts.
+            
+            a.b -- nextIdentifier would be 'b' whereas <param name="resultBases">resultBases</param> contained the resolution result for 'a'
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.HandleNodeMatch(DSharp.Dom.INode,DSharp.Resolver.ResolutionContext,DSharp.Resolver.AbstractType,System.Object)">
+            <summary>
+            The variable's or method's base type will be resolved (if auto type, the intializer's type will be taken).
+            A class' base class will be searched.
+            etc..
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.GetInvisibleTypeParameters(DSharp.Dom.DNode,DSharp.Resolver.ResolutionContext)">
+            <summary>
+            Add 'superior' template parameters to the current symbol because 
+            the parameters might be re-used in the nested class.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.TypeDeclarationResolver.GetForeachIteratorType(DSharp.Dom.DVariable,DSharp.Resolver.ResolutionContext)">
+            <summary>
+            string[] s;
+            
+            foreach(i;s)
+            {
+            	// i is of type 'string'
+            	writeln(i);
+            }
+            </summary>
+        </member>
+        <member name="M:DSharp.Completion.ICompletionDataGenerator.Add(System.Byte)">
+            <summary>
+            Adds a token entry
+            </summary>
+        </member>
+        <member name="M:DSharp.Completion.ICompletionDataGenerator.AddPropertyAttribute(System.String)">
+            <summary>
+            Adds a property attribute
+            </summary>
+        </member>
+        <member name="M:DSharp.Completion.ICompletionDataGenerator.Add(DSharp.Dom.INode)">
+            <summary>
+            Adds a node to the completion data
+            </summary>
+            <param name="Node"></param>
+        </member>
+        <member name="F:DSharp.Completion.ArgumentsResolutionResult.MethodIdentifier">
+            <summary>
+            Usually some part of the ParsedExpression.
+            For instance in a PostfixExpression_MethodCall it'd be the PostfixForeExpression.
+            </summary>
+        </member>
+        <member name="F:DSharp.Completion.ArgumentsResolutionResult.Arguments">
+            <summary>
+            Stores the already typed arguments (Expressions) + their resolved types.
+            The value part will be null if nothing could get returned.
+            </summary>
+        </member>
+        <member name="F:DSharp.Completion.ArgumentsResolutionResult.CurrentlyCalledMethod">
+            <summary>
+            Identifies the currently called method overload. Is an index related to <see cref="F:DSharp.Completion.ArgumentsResolutionResult.ResolvedTypesOrMethods"/>
+            </summary>
+        </member>
+        <member name="M:DSharp.Completion.ParameterInsightResolution.ResolveArgumentContext(DSharp.Completion.IEditorData,DSharp.Resolver.ResolutionContext)">
+            <summary>
+            Reparses the given method's fucntion body until the cursor position,
+            searches the last occurring method call or template instantiation,
+            counts its already typed arguments
+            and returns a wrapper containing all the information.
+            </summary>
+        </member>
+        <member name="F:DSharp.Resolver.ResolutionContext.CompilationEnvironment">
+            <summary>
+            Stores global compilation parameters.
+            Used by BuildConditionSet() as global flags for ConditionSet instances.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ResolutionContext.ScopedBlockIsInNodeHierarchy(DSharp.Dom.INode)">
+            <summary>
+            Returns true if the currently scoped node block is located somewhere inside the hierarchy of n.
+            Used for prevention of unnecessary context pushing/popping.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ResolutionContext.CheckForSingleResult``1(``0[],DSharp.Dom.ISyntaxRegion)">
+            <summary>
+            Returns true if 'results' only contains one valid item
+            </summary>
+        </member>
+        <member name="P:DSharp.Resolver.ResolutionContext.PrevContextIsInSameHierarchy">
+            <summary>
+            Returns true if the the context that is stacked below the current context represents the parent item of the current block scope
+            </summary>
+        </member>
+        <member name="T:DSharp.Completion.EditorData">
+            <summary>
+            Generic interface between a high level editor object and the low level completion engine
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.CodeLocation">
+            <summary>
+            A line/column position.
+            NRefactory lines/columns are counting from one.
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.ImportStatement.PseudoAliases">
+            <summary>
+            These aliases are used for better handling of aliased modules imports and/or selective imports
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.ImportStatement.Declarations">
+            <summary>
+            Returns import pseudo-alias variables
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.ImportStatement.Import.ModuleAlias">
+            <summary>
+            import io=std.stdio;
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.ImportStatement.ImportBindings.SelectedSymbols">
+            <summary>
+            Keys: symbol alias
+            Values: symbol
+            
+            If value empty: Key is imported symbol
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.ModuleAliasNode">
+            <summary>
+            import io = std.stdio;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.ImportSymbolAlias">
+            <summary>
+            import std.stdio : writeln;
+            import std.stdio : wr = writeln;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Statements.StatementContainingStatement">
+            <summary>
+            Represents a statement that can contain other statements, which may become scoped.
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.Statements.StatementContainingStatement.SearchStatementDeeply(DSharp.Dom.CodeLocation)">
+            <summary>
+            Scans the current scope. If a scoping statement was found, also these ones get searched then recursively.
+            </summary>
+            <param name="Where"></param>
+        </member>
+        <member name="P:DSharp.Dom.Statements.BlockStatement.Declarations">
+            <summary>
+            Returns all child nodes inside the current scope.
+            Includes nodes from direct block statement substatements and alias nodes from import statements.
+            Condition
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.Statements.ForeachStatement.UpperAggregate">
+            <summary>
+            Used in ForeachRangeStatements. The Aggregate field will be the lower expression then.
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.Statements.SwitchStatement.CaseStatement.LastExpression">
+            <summary>
+            Used for CaseRangeStatements
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.Statements.AsmStatement.Instructions">
+            <summary>
+            TODO: Put the instructions into extra ISyntaxRegions
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.Statements.DeclarationStatement.ToCode">
+            <summary>
+            Declarations done by this statement. Contains more than one item e.g. on int a,b,c;
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.TypeResolution.DResolver">
+            <summary>
+            Generic class for resolve module relations and/or declarations
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.DResolver.GetScopedCodeObject(DSharp.Completion.IEditorData,DSharp.Resolver.TypeResolution.DResolver.AstReparseOptions,DSharp.Resolver.ResolutionContext)">
+            <summary>
+            Reparses the code of the current scope and returns the object (either IExpression or ITypeDeclaration derivative)
+            that is beneath the caret location.
+            
+            Used for code completion/symbol resolution.
+            Mind the extra options that might be passed via the Options parameter.
+            </summary>
+            <param name="ctxt">Can be null</param>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.DResolver.ResolveBaseClasses(DSharp.Resolver.UserDefinedType,DSharp.Resolver.ResolutionContext,System.Boolean)">
+            <summary>
+            Takes the class passed via the tr, and resolves its base class and/or implemented interfaces.
+            Also usable for enums.
+            
+            Never returns null. Instead, the original 'tr' object will be returned if no base class was resolved.
+            Will clone 'tr', whereas the new object will contain the base class.
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.DResolver.StripAliasSymbol(DSharp.Resolver.AbstractType)">
+            <summary>
+            If an aliased type result has been passed to this method, it'll return the resolved type.
+            If aliases were done multiple times, it also tries to skip through these.
+            
+            alias char[] A;
+            alias A B;
+            
+            var resolvedType=TryRemoveAliasesFromResult(% the member result from B %);
+            --> resolvedType will be StaticTypeResult from char[]
+            
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.TypeResolution.DResolver.StripMemberSymbols(DSharp.Resolver.AbstractType)">
+            <summary>
+            Removes all kinds of members from the given results.
+            </summary>
+            <param name="resolvedMember">True if a member (not an alias!) had to be bypassed</param>
+        </member>
+        <member name="F:DSharp.Resolver.TypeResolution.DResolver.AstReparseOptions.ReturnRawParsedExpression">
+            <summary>
+            Returns the expression without scanning it down depending on the caret location
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Modifier">
+            <summary>
+            Represents an attribute a declaration may have or consists of.
+            A modifier or storage class.
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.Modifier.CleanupAccessorAttributes(System.Collections.Generic.List{DSharp.Dom.DAttribute})">
+            <summary>
+            Removes all public,private,protected or package attributes from the list
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.Modifier.CleanupAccessorAttributes(System.Collections.Generic.Stack{DSharp.Dom.DAttribute},System.Byte)">
+            <summary>
+            Removes all public,private,protected or package attributes from the stack
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.PragmaAttribute.Identifier">
+            <summary>
+            Alias for LiteralContent.
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.DModule">
+            <summary>
+            Encapsules an entire document and represents the root node
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.DModule.AssignFrom(DSharp.Dom.INode)">
+            <summary>
+            Applies file name, children and imports from an other module instance
+            </summary>
+            <param name="Other"></param>
+        </member>
+        <member name="M:DSharp.Dom.DModule.GetModuleName(System.String,DSharp.Dom.DModule)">
+            <summary>
+            Returns a package-module name-combination (like std.stdio) in dependency of its base directory (e.g. C:\dmd2\src\phobos)
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.DModule.GetModuleName(System.String,System.String)">
+            <summary>
+            Returns the relative module name including its packages based on the baseDirectory parameter.
+            If the file isn't located in the base directory, the file name minus the extension is returned only.
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.DModule.OptionalModuleStatement">
+            <summary>
+            A module's first statement can be a module ABC; statement. If so, this variable will keep it.
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.DModule.ModuleName">
+            <summary>
+            Name alias
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.Lexer.escapeSequenceBuffer">
+            <asummary>
+            used for the original value of strings (with escape sequences).
+            </asummary>
+        </member>
+        <member name="F:DSharp.Parser.Lexer.OnlyEnlistDDocComments">
+            <summary>
+            Set to false if normal block comments shall be logged, too.
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.Lexer.Comments">
+            <summary>
+            A temporary storage for DDoc comments
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.Lexer.StartPeek">
+            <summary>
+            Must be called before a peek operation.
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.Lexer.Peek">
+            <summary>
+            Gives back the next token. A second call to Peek() gives the next token after the last call for Peek() and so on.
+            </summary>
+            <returns>An <see cref="P:DSharp.Parser.Lexer.CurrentToken"/> object.</returns>
+        </member>
+        <member name="M:DSharp.Parser.Lexer.NextToken">
+            <summary>
+            Reads the next token and gives it back.
+            </summary>
+            <returns>An <see cref="P:DSharp.Parser.Lexer.CurrentToken"/> object.</returns>
+        </member>
+        <member name="M:DSharp.Parser.Lexer.SkipCurrentBlock">
+            <summary>
+            Skips to the end of the current code block.
+            For this, the lexer must have read the next token AFTER the token opening the
+            block (so that Lexer.DToken is the block-opening token, not Lexer.LookAhead).
+            After the call, Lexer.LookAhead will be the block-closing token.
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.Lexer.ReadEscapeSequence(System.Char@,System.String@)">
+            <summary>
+            reads an escape sequence
+            </summary>
+            <param name="ch">The character represented by the escape sequence,
+            or '\0' if there was an error or the escape sequence represents a character that
+            can be represented only be a suggorate pair</param>
+            <param name="surrogatePair">Null, except when the character represented
+            by the escape sequence can only be represented by a surrogate pair (then the string
+            contains the surrogate pair)</param>
+            <returns>The escape sequence</returns>
+        </member>
+        <member name="M:DSharp.Parser.Lexer.ReadSpecialTokenSequence">
+            <summary>
+            http://dlang.org/lex.html#SpecialTokenSequence
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.Lexer.IsLegalDigit(System.Char,System.Int32)">
+            <summary>
+            Tests if digit <para>d</para> is allowed in the specified numerical base.
+            If <para>NumBase</para> is 10, only digits from 0 to 9 would be allowed.
+            If NumBase=2, 0 and 1 are legal.
+            If NumBase=8, 0 to 7 are legal.
+            If NumBase=16, 0 to 9 and a to f are allowed.
+            Note: Underscores ('_') are legal everytime!
+            </summary>
+            <param name="d"></param>
+            <param name="NumBase"></param>
+            <returns></returns>
+        </member>
+        <member name="P:DSharp.Parser.Lexer.CurrentToken">
+            <summary>
+            Get the current DToken.
+            </summary>
+        </member>
+        <member name="P:DSharp.Parser.Lexer.LookAhead">
+            <summary>
+            The next DToken (The <see cref="P:DSharp.Parser.Lexer.CurrentToken"/> after <see cref="M:DSharp.Parser.Lexer.NextToken"/> call) .
+            </summary>
+        </member>
+        <member name="T:DSharp.Parser.DParser">
+            <summary>
+            Parser for D Code
+            </summary>
+            <summary>
+            Parser for D Code
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DTokens.At">
+            <summary>
+            @
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DTokens.PowAssign">
+            <summary>
+            ^^=
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DTokens.Unordered">
+            <summary>
+            !&lt;&gt;=
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DTokens.UnorderedOrEqual">
+            <summary>
+            !&lt;&gt;
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DTokens.UnorderedLessOrEqual">
+            <summary>
+            !&gt;
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DTokens.ShiftRight">
+            <summary>
+            &gt;&gt;
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DTokens.ShiftRightUnsigned">
+            <summary>
+            &gt;&gt;&gt;
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DTokens.ContainsStorageClass(System.Collections.Generic.IEnumerable{DSharp.Dom.DAttribute})">
+            <summary>
+            Checks if modifier array contains member attributes. If so, it returns the last found attribute. Otherwise 0.
+            </summary>
+            <param name="mods"></param>
+            <returns></returns>
+        </member>
+        <member name="F:DSharp.Parser.DParser.doc">
+            <summary>
+            Holds document structure
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DParser.BlockAttributes">
+            <summary>
+            Modifiers for entire block
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DParser.DeclarationAttributes">
+            <summary>
+            Modifiers for current expression only
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.FindLastImportStatementEndLocation(DSharp.Dom.DModule,System.String)">
+            <summary>
+            Finds the last import statement and returns its end location (the position after the semicolon).
+            If no import but module statement was found, the end location of this module statement will be returned.
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.UpdateModule(DSharp.Dom.DModule)">
+            <summary>
+            Parses the module again
+            </summary>
+            <param name="Module"></param>
+        </member>
+        <member name="M:DSharp.Parser.DParser.Parse(System.Boolean,System.Boolean)">
+            <summary>
+            Initializes and proceed parse procedure
+            </summary>
+            <param name="imports">List of imports in the module</param>
+            <param name="ParseStructureOnly">If true, all statements and non-declarations are ignored - useful for analysing libraries</param>
+            <returns>Completely parsed module structure</returns>
+        </member>
+        <member name="M:DSharp.Parser.DParser.Root">
+            <summary>
+            Module entry point
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.CheckForPostSemicolonComment">
+            <summary>
+            Returns the pre- and post-declaration comment
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="F:DSharp.Parser.DParser.AllowWeakTypeParsing">
+            <summary>
+            Used if the parser is unsure if there's a type or an expression - then, instead of throwing exceptions, the Type()-Methods will simply return null;
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.Declarator(DSharp.Dom.ITypeDeclaration,System.Boolean,DSharp.Dom.INode)">
+            <summary>
+            Parses a type declarator
+            </summary>
+            <returns>A dummy node that contains the return type, the variable name and possible parameters of a function declaration</returns>
+        </member>
+        <member name="M:DSharp.Parser.DParser.OldCStyleFunctionPointer(DSharp.Dom.DNode,System.Boolean)">
+            <summary>
+            Add some syntax possibilities here
+            int (x);
+            int(*foo);
+            This way of declaring function pointers is deprecated
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.DeclaratorSuffixes(DSharp.Dom.DNode)">
+            <summary>
+            Note:
+            http://www.digitalmars.com/d/2.0/declaration.html#DeclaratorSuffix
+            The definition of a sequence of declarator suffixes is buggy here! Theoretically template parameters can be declared without a surrounding ( and )!
+            Also, more than one parameter sequences are possible!
+            
+            TemplateParameterList[opt] Parameters MemberFunctionAttributes[opt]
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.Declarator2">
+            <summary>
+            http://www.digitalmars.com/d/2.0/declaration.html#Declarator2
+            The next bug: Following the definition strictly, this function would end up in an endless loop of requesting another Declarator2
+            
+            So here I think that a Declarator2 only consists of a couple of BasicType2's and some DeclaratorSuffixes
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:DSharp.Parser.DParser.Parameters(DSharp.Dom.DMethod)">
+            <summary>
+            Parse parameters
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.AtAttribute(DSharp.Dom.IBlockNode)">
+            <summary>
+            Parses an attribute that starts with an @. Might be user-defined or a built-in attribute.
+            Due to the fact that
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.AttributeTrail(DSharp.Dom.DBlockNode,DSharp.Dom.DAttribute,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="module"></param>
+            <param name="previouslyParsedAttribute"></param>
+            <param name="RequireDeclDef">If no colon and no open curly brace is given as lookahead, a DeclDef may be parsed otherwise, if parameter is true.</param>
+            <returns></returns>
+        </member>
+        <member name="M:DSharp.Parser.DParser.IsAssignExpression">
+            <summary>
+            This function has a very high importance because here we decide whether it's a declaration or assignExpression!
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.AddExpression(DSharp.Dom.IBlockNode)">
+            <summary>
+            Note: Add, Multiply as well as Cat Expressions are parsed in this method.
+            </summary>
+        </member>
+        <member name="M:DSharp.Parser.DParser.IsTemplateParameterList">
+            <summary>
+            Be a bit lazy here with checking whether there're templates or not
+            </summary>
+        </member>
+        <member name="P:DSharp.Parser.DParser.LastParsedObject">
+            <summary>
+            Used to track the expression/declaration/statement/whatever which is handled currently.
+            Required for code completion.
+            </summary>
+        </member>
+        <member name="P:DSharp.Parser.DParser.ExpectingNodeName">
+            <summary>
+            Required for code completion.
+            True if a type/variable/method/etc. identifier is expected.
+            </summary>
+        </member>
+        <member name="P:DSharp.Parser.DParser.la">
+            <summary>
+            lookAhead token
+            </summary>
+        </member>
+        <member name="P:DSharp.Parser.DParser.strVal">
+            <summary>
+            Retrieve string value of current token
+            </summary>
+        </member>
+        <member name="P:DSharp.Parser.DParser.IsStructInitializer">
+            <summary>
+            If there's a semicolon or a return somewhere inside the braces, it automatically is a delegate, and not a struct initializer
+            </summary>
+        </member>
+        <member name="P:DSharp.Parser.DParser.IsAtAttribute">
+            <summary>
+            True on e.g. @property or @"Hey ho my attribute"
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.ParserTrackerVariables.LastParsedObject">
+            <summary>
+            Used to track the expression/declaration/statement/whatever which is handled currently.
+            Required for code completion.
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.ParserTrackerVariables.ExpectingNodeName">
+            <summary>
+            Required for code completion.
+            True if a type/variable/method/etc. identifier is expected.
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.ContainerExpression">
+            <summary>
+            Expressions that contain other sub-expressions somewhere share this interface
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.AssignExpression">
+            <summary>
+            a = b;
+            a += b;
+            a *= b; etc.
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.ConditionalExpression">
+            <summary>
+            a ? b : b;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.OrOrExpression">
+            <summary>
+            a || b;
+            </summary>
+        </member>
+        <!-- Некорректный комментарий в формате XML для члена "T:DSharp.Dom.Expressions.AndAndExpression" проигнорирован -->
+        <member name="T:DSharp.Dom.Expressions.XorExpression">
+            <summary>
+            a ^ b;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.OrExpression">
+            <summary>
+            a | b;
+            </summary>
+        </member>
+        <!-- Некорректный комментарий в формате XML для члена "T:DSharp.Dom.Expressions.AndExpression" проигнорирован -->
+        <member name="T:DSharp.Dom.Expressions.EqualExpression">
+            <summary>
+            a == b; a != b;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.IdendityExpression">
+            <summary>
+            a is b; a !is b;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.RelExpression">
+            <summary>
+            a &lt;&gt;= b etc.
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.InExpression">
+            <summary>
+            a in b; a !in b
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.ShiftExpression">
+            <summary>
+            a >> b; a &lt;&lt; b; a >>> b;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.AddExpression">
+            <summary>
+            a + b; a - b;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.MulExpression">
+            <summary>
+            a * b; a / b; a % b;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.CatExpression">
+            <summary>
+            a ~ b
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.UnaryExpression_And">
+            <summary>
+            Creates a pointer from the trailing type
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.UnaryExpression_Mul">
+            <summary>
+            Gets the pointer base type
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.UnaryExpression_Cat">
+            <summary>
+            Bitwise negation operation:
+            
+            int a=56;
+            int b=~a;
+            
+            b will be -57;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.UnaryExpression_Type">
+            <summary>
+            (Type).Identifier
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.NewExpression">
+            <summary>
+            NewExpression:
+            	NewArguments Type [ AssignExpression ]
+            	NewArguments Type ( ArgumentList )
+            	NewArguments Type
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.AnonymousClassExpression">
+            <summary>
+            NewArguments ClassArguments BaseClasslist { DeclDefs } 
+            new ParenArgumentList_opt class ParenArgumentList_opt SuperClass_opt InterfaceClasses_opt ClassBody
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.CastExpression">
+            <summary>
+            CastExpression:
+            	cast ( Type ) UnaryExpression
+            	cast ( CastParam ) UnaryExpression
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.PostfixExpression_Access">
+            <summary>
+            PostfixExpression . Identifier
+            PostfixExpression . TemplateInstance
+            PostfixExpression . NewExpression
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.Expressions.PostfixExpression_Access.AccessExpression">
+            <summary>
+            Can be either
+            1) An Identifier
+            2) A Template Instance
+            3) A NewExpression
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.PostfixExpression_MethodCall">
+            <summary>
+            PostfixExpression ( )
+            PostfixExpression ( ArgumentList )
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.PostfixExpression_Index">
+            <summary>
+            IndexExpression:
+            	PostfixExpression [ ArgumentList ]
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.PostfixExpression_Slice">
+            <summary>
+            SliceExpression:
+            	PostfixExpression [ ]
+            	PostfixExpression [ AssignExpression .. AssignExpression ]
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.IdentifierExpression">
+            <summary>
+            Identifier as well as literal primary expression
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.TypeDeclarationExpression">
+            <summary>
+            BasicType . Identifier
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.ArrayLiteralExpression">
+            <summary>
+            auto arr= [1,2,3,4,5,6];
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.AssocArrayExpression">
+            <summary>
+            auto arr=['a':0xa, 'b':0xb, 'c':0xc, 'd':0xd, 'e':0xe, 'f':0xf];
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.Expressions.IsExpression.EqualityTest">
+            <summary>
+            True if Type == TypeSpecialization instead of Type : TypeSpecialization
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.Expressions.IsExpression.ArtificialFirstSpecParam">
+            <summary>
+            Persistent parameter object that keeps information about the first specialization 
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.Expressions.SurroundingParenthesesExpression">
+            <summary>
+            ( Expression )
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.DToken.Subformat">
+            <summary>
+            Used for scalar, floating and string literals.
+            Marks special formats such as explicit unsigned-ness, wide char or dchar-based strings etc.
+            </summary>
+        </member>
+        <member name="F:DSharp.Parser.Comment.CommentStartsLine">
+            <value>
+            Is true, when the comment is at line start or only whitespaces
+            between line and comment start.
+            </value>
+        </member>
+        <member name="T:DSharp.Dom.IdentifierDeclaration">
+            <summary>
+            Identifier, e.g. "foo"
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.DTokenDeclaration">
+            <summary>
+            int, void, float
+            </summary>
+        </member>
+        <member name="M:DSharp.Dom.DTokenDeclaration.#ctor(System.Byte,DSharp.Dom.ITypeDeclaration)">
+            <summary>
+            
+            </summary>
+            <param name="p">The token</param>
+            <param name="td">Its base token</param>
+        </member>
+        <member name="T:DSharp.Dom.ArrayDecl">
+            <summary>
+            Extends an identifier by an array literal.
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.ArrayDecl.KeyType">
+            <summary>
+            Used for associative arrays; Contains all declaration parts that are located inside the square brackets.
+            Integer by default.
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.ArrayDecl.ValueType">
+            <summary>
+            Alias for InnerDeclaration; contains all declaration parts that are located in front of the square brackets.
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.DelegateDeclaration.IsFunction">
+            <summary>
+            Is it a function(), not a delegate() ?
+            </summary>
+        </member>
+        <member name="P:DSharp.Dom.DelegateDeclaration.ReturnType">
+            <summary>
+            Alias for InnerDeclaration.
+            Contains 'int' in
+            int delegate() foo;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.PointerDecl">
+            <summary>
+            int* ptr;
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.MemberFunctionAttributeDecl">
+            <summary>
+            const(char)
+            </summary>
+        </member>
+        <member name="F:DSharp.Dom.MemberFunctionAttributeDecl.Modifier">
+            <summary>
+            Equals <see cref="!:Token"/>
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.TypeOfDeclaration">
+            <summary>
+            typeof(...)
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.VectorDeclaration">
+            <summary>
+            __vector(...)
+            </summary>
+        </member>
+        <member name="T:DSharp.Dom.VarArgDecl">
+            <summary>
+            void foo(int i,...) {} -> foo(1,2,3,4); = legal
+            </summary>
+        </member>
+        <member name="M:DSharp.Resolver.ContextFrame.MatchesDeclarationEnvironment(System.Collections.Generic.IEnumerable{DSharp.Dom.DAttribute})">
+            <summary>
+            Returns true if a node fully matches its environment concerning static if() declaration constraints and version/debug() restrictions.
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.TypeResolution.UFCSResolver">
+            <summary>
+            UFCS: User function call syntax;
+            A base expression will be used as a method's first call parameter 
+            so it looks like the first expression had a respective sub-method.
+            Example:
+            assert("fdas".reverse() == "asdf"); -- reverse() will be called with "fdas" as the first argument.
+            
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ConditionalCompilationFlags">
+            <summary>
+            Stores [debug] version information about the compiled programs.
+            These information are valid module-independently and depend on 
+            1) Compiler vendor-specific defintions and/or
+            2) Flags that are set in the compiler's command line.
+            Further info: http://dlang.org/version.html
+            </summary>
+        </member>
+        <member name="T:DSharp.Misc.VersionIdEvaluation">
+            <summary>
+            Helper class for retrieving all predefined version identifiers depending on e.g.
+            the currently used OS, CPU-specific properties and further flags.
+            For details, see http://dlang.org/version.html, "Predefined Versions"
+            </summary>
+        </member>
+        <member name="M:DSharp.Misc.VersionIdEvaluation.GetVersionIds(System.String,System.String,System.Boolean,System.Boolean)">
+            <summary>
+            See class description.
+            </summary>
+            <returns>
+            The version identifiers.
+            </returns>
+            <param name="compilerId">The compiler-specific version identifier which is e.g. DigitalMars for dmd1/dmd2</param>
+            <param name="finalCompilerCommandLine">
+            Used for extracting additional information like "-cov" that implies D_Coverage or "-m64" that
+            implies D
+            </param>
+            <param name="isD1">If false, D_Version2 will be defined</param>
+        </member>
+        <member name="F:DSharp.Misc.ParsingFinishedEventArgs.Duration">
+            <summary>
+            Milliseconds.
+            </summary>
+        </member>
+        <member name="T:DSharp.Misc.GlobalParseCache">
+            <summary>
+            Threadsafe global parse cache.
+            Central storage of scanned directories.
+            </summary>
+        </member>
+        <member name="F:DSharp.Misc.GlobalParseCache.ParsedDirectories">
+            <summary>
+            Contains phys path -> RootPackage relationships.
+            </summary>
+        </member>
+        <member name="F:DSharp.Misc.GlobalParseCache.fileLookup">
+            <summary>
+            Lookup that is used for fast filename-AST lookup. Do NOT modify, it'll be done inside the ModulePackage instances.
+            </summary>
+        </member>
+        <member name="M:DSharp.Misc.GlobalParseCache.StopScanning(System.Boolean)">
+            <summary>
+            Stops the scanning. If discardProgress is true, caches will be cleared.
+            </summary>
+        </member>
+        <member name="M:DSharp.Misc.GlobalParseCache.GetParseProgress(System.String)">
+            <summary>
+            Returns the parse progress factor (from 0.0 to 1.0); NaN if there's no such directory being scanned.
+            </summary>
+        </member>
+        <member name="M:DSharp.Misc.GlobalParseCache.GetRootPackage(System.String)">
+            <param name="path">Path which may contains a part of some root package's path</param>
+        </member>
+        <member name="F:DSharp.Misc.GlobalParseCache.StatIntermediate.totalMilliseconds">
+            <summary>
+            Theroetical time needed for parsing all files in one sequence.
+            </summary>
+        </member>
+        <member name="F:DSharp.Misc.GlobalParseCache.StatIntermediate.parseSubTasksUntilFinished">
+            <summary>
+            Stores an integer!
+            </summary>
+        </member>
+        <member name="P:DSharp.Misc.GlobalParseCache.StatIntermediate.actualTimeNeeded">
+            <summary>
+            The time one had to wait until the parse task finished. Milliseconds.
+            </summary>
+        </member>
+        <member name="P:DSharp.Misc.GlobalParseCache.StatIntermediate.ActualParseTimeNeeded">
+            <summary>
+            The time one had to wait until the actual parse process (which excludes file content loading, thread synchronizing etc) finished. Milliseconds.
+            </summary>
+        </member>
+        <member name="T:DSharp.Refactoring.OldTypeReferenceFinder">
+            <summary>
+            Analyses an AST and returns all Syntax Regions that represent a type
+            </summary>
+        </member>
+        <member name="F:DSharp.Refactoring.OldTypeReferenceFinder.q">
+            <summary>
+            Contains the current scope as well as the syntax region
+            </summary>
+        </member>
+        <member name="M:DSharp.Refactoring.OldTypeReferenceFinder.DoPrimaryIdCheck(System.Int32)">
+            <summary>
+            Returns true if a type called 'id' exists in the current scope
+            </summary>
+        </member>
+        <member name="M:DSharp.Refactoring.TypeReferenceFinder.OnScopedBlockChanged(DSharp.Dom.IBlockNode)">
+            <summary>
+            Used for caching available types.
+            </summary>
+        </member>
+        <member name="M:DSharp.Refactoring.TypeReferenceFinder.DoPrimaryIdCheck(System.Int32)">
+            <summary>
+            Returns true if a type called 'id' exists in the current scope
+            </summary>
+        </member>
+        <member name="T:DSharp.Resolver.ASTScanner.MemberFilter">
+            <summary>
+            A whitelisting filter for members to show in completion menus.
+            </summary>
+        </member>
+        <member name="M:DSharp.Completion.CodeCompletion.GenerateCompletionData(DSharp.Completion.IEditorData,DSharp.Completion.ICompletionDataGenerator,System.Char,System.Boolean)">
+            <summary>
+            Generates the completion data.
+            </summary>
+            <param name="checkForCompletionAllowed">Set to <c>false</c> if you already ensured that completion can occur in the current editing context.</param>
+        </member>
+        <member name="T:DSharp.Resolver.ASTScanner.ConditionsFrame">
+            <summary>
+            Used for storing declaration environment constraints (debug/version/static if) in the AbstractVisitor.
+            Unused atm.
+            </summary>
+        </member>
+    </members>
+</doc>

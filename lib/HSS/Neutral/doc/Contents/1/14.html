@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This comment will force IE7 to go into quirks mode. -->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"></meta>
+<link rel="stylesheet" type="text/css" href="../../CSS/Contents.css"></link>
+<script type="text/javascript" src="../../JS/Common.js"></script>
+<title>DatabaseConnectionPool Class</title>
+</head>
+<body>
+<div id="Header">
+<div id="ProjectTitle">Documentation Project</div>
+<div id="PageTitle">DatabaseConnectionPool Class</div>
+<div id="HeaderShortcuts">
+<a href="#SectionHeader0" onclick="javascript: SetSectionVisibility(0, true); SetExpandCollapseAllToCollapseAll();">Syntax</a>&nbsp;
+<a href="#SectionHeader1" onclick="javascript: SetSectionVisibility(1, true); SetExpandCollapseAllToCollapseAll();">Remarks</a>&nbsp;
+<a href="#SectionHeader2" onclick="javascript: SetSectionVisibility(2, true); SetExpandCollapseAllToCollapseAll();">Members</a>&nbsp;
+<a href="#SectionHeader3" onclick="javascript: SetSectionVisibility(3, true); SetExpandCollapseAllToCollapseAll();">Example</a>&nbsp;
+</div>
+<div class="DarkLine"></div>
+<div class="LightLine"></div>
+<div id="HeaderToolbar">
+<img id="ExpandCollapseAllImg" src="../../GFX/SmallSquareExpanded.gif" alt="" style="vertical-align: top;" onclick="javascript: ToggleAllSectionsVisibility();" />
+<span id="ExpandCollapseAllSpan" onclick="javascript: ToggleAllSectionsVisibility();">Collapse All</span>
+</div>
+</div>
+<div id="Contents">
+<a id="ContentsAnchor">&nbsp;</a>
+A pool of open Database connections.
+<div id="ItemLocation">
+<b>Namespace:</b> <a href="../../Contents/1/3.html">HSS.Data.Storage</a><br />
+<b>Assembly:</b> <a href="../../Contents/1/1.html">HSS.Data.Storage.NET45</a>
+</div>
+<div id="SectionHeader0" class="SectionHeader">
+<img id="SectionExpanderImg0" src="../../GFX/BigSquareExpanded.gif" alt="Collapse/Expand" onclick="javascript: ToggleSectionVisibility(0);" />
+<span class="SectionHeader">
+<span class="ArrowCursor" onclick="javascript: ToggleSectionVisibility(0);">
+Syntax
+</span>
+</span>
+</div>
+
+<div id="SectionContainerDiv0" class="SectionContainer">
+<table class="CodeTable"><col width="100%" /><tr class="CodeTable"><th class="CodeTable">C#</th></tr><tr class="CodeTable"><td class="CodeTable"><table style="width: 100%;" class="InsideCodeBlock">
+<col width="0%" />
+<col width="100%" />
+<tr>
+<td class="NoWrapTop">public sealed class DatabaseConnectionPool </td>
+<td>&nbsp;</td>
+</tr>
+</table>
+</td></tr></table>
+<div class="TopLink"><a href="#ContentsAnchor">Top</a></div></div>
+<div id="SectionHeader1" class="SectionHeader">
+<img id="SectionExpanderImg1" src="../../GFX/BigSquareExpanded.gif" alt="Collapse/Expand" onclick="javascript: ToggleSectionVisibility(1);" />
+<span class="SectionHeader">
+<span class="ArrowCursor" onclick="javascript: ToggleSectionVisibility(1);">
+Remarks
+</span>
+</span>
+</div>
+
+<div id="SectionContainerDiv1" class="SectionContainer">
+<div class="RemarksContainer">
+<p>
+            Maintains a pool of one or more open connections that can be reused or shared
+            through out your application.
+            </p>
+<p>
+            By default, you're required to monitor your applications
+            exiting, suspending and resuming events to ensure you
+            release any assoicated files used by your application.
+            </p>
+<p>
+  <note type="warning">
+            AutoExit is ignored for MonoTouch and Mono for Android.
+            </note>
+  <note type="warning">
+            If you turn on this feature, there is a chance that it could reset or
+            suspend the connection pool prior to you saving your data, and therefore
+            is only recommended for scenarios where you don't plan to save or load data
+            during these application life cycle events.
+            </note>
+            Optionally, you can indicate the connection pool monitors the
+            applications exit, suspending and resuming events and automatically
+            perform the appropriate action for the platform. You can turn on
+            this feature by setting the <a href="../../Contents/1/113.html">AutoExit</a> property to True
+            prior to accessing the <a href="../../Contents/1/114.html">Shared</a> property for the first time.
+            </p>
+</div>
+<div class="TopLink"><a href="#ContentsAnchor">Top</a></div></div>
+<div id="SectionHeader2" class="SectionHeader">
+<img id="SectionExpanderImg2" src="../../GFX/BigSquareExpanded.gif" alt="Collapse/Expand" onclick="javascript: ToggleSectionVisibility(2);" />
+<span class="SectionHeader">
+<span class="ArrowCursor" onclick="javascript: ToggleSectionVisibility(2);">
+Members
+</span>
+</span>
+</div>
+
+<div id="SectionContainerDiv2" class="SectionContainer">
+<p>Click <a href="../../Contents/1/115.html">here</a> to see the list of members.</p>
+<div class="TopLink"><a href="#ContentsAnchor">Top</a></div></div>
+<div id="SectionHeader3" class="SectionHeader">
+<img id="SectionExpanderImg3" src="../../GFX/BigSquareExpanded.gif" alt="Collapse/Expand" onclick="javascript: ToggleSectionVisibility(3);" />
+<span class="SectionHeader">
+<span class="ArrowCursor" onclick="javascript: ToggleSectionVisibility(3);">
+Example
+</span>
+</span>
+</div>
+
+<div id="SectionContainerDiv3" class="SectionContainer">
+<p>
+            Reset, suspend or resume the connection pool
+            </p>
+<table class="ExampleCodeTable"><col width="100%" /><tr class="CodeTable"><th class="CodeTable">C#</th></tr><tr class="CodeTable"><td class="CodeTable"><pre>public App()
+{
+	//
+	// .NET, Silverlight or Mono Platforms
+	//
+	AppDomain.CurrentDomain.ProcessExit += (s, e) =&gt; 
+	{
+		// save any global changes as necessary
+		DatabaseConnectionPool.Shared.Reset();
+	}
+	
+	//
+	// Windows 8 (Windows Runtime)
+	//
+	Windows.UI.Xaml.Application.Current.Resuming += (s, e) =&gt;
+	{
+		DatabaseConnectionPool.Shared.Resume();
+		// load any global changes as necessary
+	};
+	Windows.UI.Xaml.Application.Current.Suspending += (s, e) =&gt;
+	{
+		var deferral = e.SuspendingOperation.GetDeferral();
+		// save any global changes as necessary
+		DatabaseConnectionPool.Shared.Suspend();
+		deferral.Complete();
+	};
+	
+	//
+	// Windows Phone 7.1 or 8
+	//
+	System.Windows.Application.Current.Activated += (s, e) =&gt;
+	{
+		DatabaseConnectionPool.Shared.Resume();
+		// load any global changes as necessary
+	};
+	System.Windows.Application.Current.Deactivated += (s, e) =&gt;
+	{
+		// save any global changes as necessary
+		DatabaseConnectionPool.Shared.Suspend();
+	};
+	System.Windows.Application.Current.Closing += (s, e) =&gt;
+	{
+		// save any global changes as necessary
+		DatabaseConnectionPool.Shared.Reset();
+	};
+	
+	// Normal database licensing information
+	Database.LicenseKey = "your license";
+	Database.DeveloperEmail = "your email";
+	
+	// Rest of your app init and start up code
+	
+}
+</pre></td></tr></table>
+<p>
+            -OR- register for and use the AutoExit feature
+            </p>
+<table class="ExampleCodeTable"><col width="100%" /><tr class="CodeTable"><th class="CodeTable">C#</th></tr><tr class="CodeTable"><td class="CodeTable"><pre>public App()
+{
+	// Should be the first call during application start up
+	// if you want to enable this feature
+	DatabaseConnectionPool.AutoExit = true;
+	
+	// Normal database licensing information
+	Database.LicenseKey = "your license";
+	Database.DeveloperEmail = "your email";
+	
+	// Rest of your app init and start up code
+	
+}
+</pre></td></tr></table>
+<div class="TopLink"><a href="#ContentsAnchor">Top</a></div></div>
+</div>
+<div id="Footer">
+<span class="Footer">Generated by <a href="http://immdocnet.codeplex.com/" target="_blank">ImmDoc .NET</a></span>.
+</div>
+
+</body>
+
+</html>
